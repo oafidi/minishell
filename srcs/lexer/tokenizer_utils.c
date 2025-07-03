@@ -80,17 +80,3 @@ void add_token_to_list(t_token **head, t_token **tail, t_token *new_token)
         *tail = new_token;
     }
 }
-
-void    free_token_list(t_token *head)
-{
-    t_token *tmp;
-
-    while (head)
-    {
-        tmp = head->next;
-        if (head->value)
-            free(head->value);
-        free(head);
-        head = tmp;
-    }
-}

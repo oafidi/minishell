@@ -1,53 +1,61 @@
 #include "../includes/minishell.h"
 
-void print_tokens(t_token *head)
+void print_redirs(t_redir *redir)
 {
-    while (head)
+    while (redir)
     {
-        if (head->type == TOKEN_WORD)
-            printf("WORD: %s (should_expand: %d)\n", head->value, head->should_expand);
-        else if (head->type == TOKEN_PIPE)
-            printf("PIPE (should_expand: %d)\n", head->should_expand);
-        else if (head->type == TOKEN_REDIR_IN)
-            printf("REDIR_IN (should_expand: %d)\n", head->should_expand);
-        else if (head->type == TOKEN_REDIR_OUT)
-            printf("REDIR_OUT (should_expand: %d)\n", head->should_expand);
-        else if (head->type == TOKEN_HEREDOC)
-            printf("HEREDOC (should_expand: %d)\n", head->should_expand);
-        else if (head->type == TOKEN_APPEND)
-            printf("APPEND (should_expand: %d)\n", head->should_expand);
-        else if (head->type == TOKEN_END)
-            printf("END (should_expand: %d)\n", head->should_expand);
-        head = head->next;
+        printf("  REDIR type: %d, target: %s, heredoc_expand: %d\n",
+               redir->type, redir->target, redir->heredoc_expand);
+        redir = redir->next;
     }
 }
 
-int main(int argc, char **argv, char **env)
+void print_cmds(t_cmd *cmd)
 {
-    (void)argc;
-    (void)argv;
-    (void)env;
+    int i;
+    int n = 1;
+    while (cmd)
+    {
+        printf("=== Command %d ===\n", n++);
+        for (i = 0; cmd->args && cmd->args[i]; i++)
+            printf("  ARG[%d]: %s\n", i, cmd->args[i]);
+        print_redirs(cmd->redirs);
+        cmd = cmd->next;
+    }
+}
 
+int main(void)
+{
     char *input;
     t_token *tokens;
+    t_cmd *cmds;
 
     while (1)
     {
-        input = readline("Enter a command: ");
+        input = readline("minishell> ");
         if (!input)
             break;
         if (*input)
             add_history(input);
+
         tokens = lexer(input);
-        if (tokens)
+        if (!tokens)
         {
-            print_tokens(tokens);
+            printf("Erreur de lexing.\n");
+            free(input);
+            continue;
+        }
+        cmds = parse_tokens(tokens);
+        if (!cmds)
+        {
+            printf("Erreur de parsing.\n");
             free_token_list(tokens);
+            free(input);
+            continue;
         }
-        else
-        {
-            printf("Erreur de parsing ou quotes non fermées.\n");
-        }
+        print_cmds(cmds);
+        free_command_list(cmds);
+        free_token_list(tokens);
         free(input);
     }
     return 0;

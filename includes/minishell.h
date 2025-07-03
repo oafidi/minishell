@@ -72,8 +72,22 @@ int     get_word_length(char *str);
 t_token *create_token(char *value, t_token_type type, int should_expand);
 void    add_token_to_list(t_token **head, t_token **tail, t_token *new_token);
 t_token *lexer(char *input);
-void    free_token_list(t_token *head);
+void    free_token_list(t_token *tokens);
+void    free_redirections(t_redir *redirs);
+void    free_command(t_cmd *cmd);
+void    free_command_list(t_cmd *commands);
 t_cmd   *create_command(void);
 t_redir *create_redirection(t_token_type type, char *target);
+void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
+int     check_pipe_end(t_token *tokens);
+int     check_pipe_errors(t_token *tokens);
+int     check_redir_errors(t_token *tokens);
+int     validate_syntax(t_token *tokens);
+int     count_command_args(t_token *start);
+void	cleanup_command_on_error(t_cmd *cmd, int i);
+t_cmd	*init_command_parsing(t_token *token);
+int	    parse_word_token(t_cmd *cmd, t_token **token_ptr, int *i);
+int	    parse_redirection_token(t_cmd *cmd, t_token **token_ptr);
+t_cmd   *parse_tokens(t_token *tokens);
 
 # endif
