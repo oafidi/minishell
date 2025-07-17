@@ -28,6 +28,14 @@ void    free_redirections(t_redir *redirs)
     }
 }
 
+void	free_command(t_cmd *cmd)
+{
+	free(cmd->args);
+	free_redirections(cmd->redirs);
+    free(cmd->line);
+	free(cmd);
+}
+
 void    free_command_list(t_cmd *commands)
 {
     t_cmd *next;

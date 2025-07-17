@@ -79,14 +79,10 @@ void    free_command_list(t_cmd *commands);
 t_cmd   *parser(t_token *tokens, global_struct *global_struct);
 t_env	*copy_environment(char **env);
 void	free_environment(t_env **env);
-int     check_pipe_errors(t_token *tokens);
-int     check_redir_errors(t_token *tokens);
-int     check_pipe_end(t_token *tokens);
 int     validate_syntax(t_token *tokens, global_struct *global_struct);
 t_cmd	*init_command_parsing(t_token *token);
 t_redir *create_redirection(t_token_type type, char *target);
 void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
 void	free_command(t_cmd *cmd);
-int	    parse_redirection_token(t_cmd *cmd, t_token **token_ptr);
-int	    parse_word_token(t_cmd *cmd, t_token **token_ptr);
+
 # endif

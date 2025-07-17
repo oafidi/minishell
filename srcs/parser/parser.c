@@ -1,5 +1,26 @@
 #include "../../includes/minishell.h"
 
+static int	parse_word_token(t_cmd *cmd, t_token **token_ptr)
+{
+	cmd->line = ft_strjoin(cmd->line, (*token_ptr)->value);
+	return (cmd->line != NULL);
+}
+
+static int	parse_redirection_token(t_cmd *cmd, t_token **token_ptr)
+{
+	t_redir			*redir;
+	t_token_type	redir_type;
+
+	redir_type = (*token_ptr)->type;
+	*token_ptr = (*token_ptr)->next;
+	redir = create_redirection(redir_type, (*token_ptr)->value);
+	if (!redir)
+		return (0);
+	add_redirection_to_cmd(cmd, redir);
+	*token_ptr = (*token_ptr)->next;
+	return (1);
+}
+
 static t_cmd	*parse_single_command(t_token **token_ptr)
 {
 	t_cmd	*cmd;
@@ -58,5 +79,7 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 {
     if (!tokens || !validate_syntax(tokens, global_struct))
         return (NULL);
-    return (parse_pipeline(&tokens));
+    if (!parse_pipeline(&tokens))
+        return (NULL);
+    return (expand_pipeline(global_struct));
 }

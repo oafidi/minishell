@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int check_pipe_errors(t_token *tokens)
+static int check_pipe_errors(t_token *tokens)
 {
     if (tokens->type == TOKEN_PIPE && tokens->prev == NULL)
     {
@@ -15,7 +15,7 @@ int check_pipe_errors(t_token *tokens)
     return (1);
 }
 
-int check_redir_errors(t_token *tokens)
+static int check_redir_errors(t_token *tokens)
 {
     if (tokens->type >= TOKEN_REDIR_IN && tokens->type <= TOKEN_HEREDOC)
     {
@@ -28,7 +28,7 @@ int check_redir_errors(t_token *tokens)
     return (1);
 }
 
-int check_pipe_end(t_token *tokens)
+static int check_pipe_end(t_token *tokens)
 {
     if (tokens && tokens->prev && tokens->prev->type == TOKEN_PIPE)
     {
@@ -38,10 +38,17 @@ int check_pipe_end(t_token *tokens)
     return (1);
 }
 
-void	free_command(t_cmd *cmd)
+int validate_syntax(t_token *tokens, global_struct *global_struct)
 {
-	free(cmd->args);
-	free_redirections(cmd->redirs);
-    free(cmd->line);
-	free(cmd);
+    while (tokens && tokens->type != TOKEN_END)
+    {
+        if (!check_pipe_errors(tokens))
+            return (global_struct->last_exit_status = 258, 0);
+        if (!check_redir_errors(tokens))
+            return (global_struct->last_exit_status = 258, 0);
+        tokens = tokens->next;
+    }
+    if (!check_pipe_end(tokens))
+        return (global_struct->last_exit_status = 258, 0);
+    return (1);
 }

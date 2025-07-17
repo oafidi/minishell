@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-t_cmd   *create_command(void)
+static t_cmd   *create_command(void)
 {
     t_cmd   *cmd;
     
@@ -53,22 +53,7 @@ void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir)
     }
 }
 
-int validate_syntax(t_token *tokens, global_struct *global_struct)
-{
-    while (tokens && tokens->type != TOKEN_END)
-    {
-        if (!check_pipe_errors(tokens))
-            return (global_struct->last_exit_status = 258, 0);
-        if (!check_redir_errors(tokens))
-            return (global_struct->last_exit_status = 258, 0);
-        tokens = tokens->next;
-    }
-    if (!check_pipe_end(tokens))
-        return (global_struct->last_exit_status = 258, 0);
-    return (1);
-}
-
-int count_command_args(t_token *start)
+static int count_command_args(t_token *start)
 {
     int     count;
     t_token *current;
@@ -84,4 +69,19 @@ int count_command_args(t_token *start)
         current = current->next;
     }
     return (count);
+}
+
+t_cmd	*init_command_parsing(t_token *token)
+{
+	t_cmd	*cmd;
+    int		arg_count;
+
+	cmd = create_command();
+	if (!cmd)
+		return (NULL);
+	cmd->argc = count_command_args(token);
+	cmd->args = malloc(sizeof(char *) * (cmd->argc + 1));
+	if (!cmd->args)
+		return (free(cmd), NULL);
+	return (cmd);
 }

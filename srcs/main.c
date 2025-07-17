@@ -6,7 +6,7 @@
 /*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 01:50:59 by oafidi            #+#    #+#             */
-/*   Updated: 2025/07/17 04:46:42 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/07/17 23:42:47 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    minishell_loop(char **env)
     char            *input;
 
     if (!init_global_struct(&global_struct, env))
-        return ;
+        exit(1);
     while (1)
     {
         input = ft_readline(&global_struct);
@@ -63,5 +63,4 @@ int main(int argc, char **argv, char **env)
     if (argc != 1)
         return (ft_putstr_fd("Invalid Arguments !", 2), 1);
     minishell_loop(env);
-    return (0);
 }
