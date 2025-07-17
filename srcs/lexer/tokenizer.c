@@ -1,34 +1,18 @@
 #include "../../includes/minishell.h"
 
-static void    fill_word(char *result, char **input, int len, int *should_expand)
+static void    fill_word(char *result, char **input, int len)
 {
     int     i;
     int     j;
-    char    quote;
 
     i = 0;
     j = 0;
-    quote = 0;
     while (i < len)
-    {
-        if (is_quote((*input)[i]) && quote == 0)
-        {
-            quote = (*input)[i];
-            if ((*input)[i] == '\'')
-                *should_expand = 0;
-            i++;
-        }
-        else if ((*input)[i] == quote)
-        {
-            quote = 0;
-            i++;
-        }
-        else
-            result[j++] = (*input)[i++];
-    }
+        result[j++] = (*input)[i++];
+    result[j] = 0;
 }
 
-static char    *extract_word(char **input, int *should_expand)
+static char    *extract_word(char **input)
 {
     char    *result;
     int     len;
@@ -39,30 +23,28 @@ static char    *extract_word(char **input, int *should_expand)
     result = malloc(len + 1);
     if (!result)
         return NULL;
-    *should_expand = 1;
-    fill_word(result, input, len, should_expand);
-    result[len] = '\0';
+    fill_word(result, input, len);
     *input += len;
-    return result;
+    return (result);
 }
 
 static t_token *handle_operator(char **input)
 {
 	if (**input == '|')
-		return ((*input)++, create_token(NULL, TOKEN_PIPE, 0));
+		return ((*input)++, create_token(NULL, TOKEN_PIPE));
 	if (**input == '<')
 	{
 		(*input)++;
 		if (**input == '<')
-			return ((*input)++, create_token(NULL, TOKEN_HEREDOC, 0));
-		return (create_token(NULL, TOKEN_REDIR_IN, 0));
+			return ((*input)++, create_token(NULL, TOKEN_HEREDOC));
+		return (create_token(NULL, TOKEN_REDIR_IN));
 	}
 	if (**input == '>')
 	{
 		(*input)++;
 		if (**input == '>')
-			return ((*input)++, create_token(NULL, TOKEN_APPEND, 0));
-		return (create_token(NULL, TOKEN_REDIR_OUT, 0));
+			return ((*input)++, create_token(NULL, TOKEN_APPEND));
+		return (create_token(NULL, TOKEN_REDIR_OUT));
 	}
 	return (NULL);
 }
@@ -70,15 +52,14 @@ static t_token *handle_operator(char **input)
 static t_token	*handle_word(char **input)
 {
 	char	*word;
-	int		should_expand;
 
-	word = extract_word(input, &should_expand);
+	word = extract_word(input);
 	if (!word)
 		return (NULL);
-	return (create_token(word, TOKEN_WORD, should_expand));
+	return (create_token(word, TOKEN_WORD));
 }
 
-t_token *lexer(char *input)
+t_token *lexer(char *input, global_struct *global_struct)
 {
 	t_token	*head;
 	t_token	*tail;
@@ -87,7 +68,7 @@ t_token *lexer(char *input)
     head = NULL;
     tail = NULL;
     if (!input || !check_quotes_balance(input))
-        return (NULL);
+        return (global_struct->last_exit_status = 1, NULL);
     while (*input)
     {
         while (is_space(*input))
@@ -101,7 +82,7 @@ t_token *lexer(char *input)
 			return (free_token_list(head), NULL);
 		add_token_to_list(&head, &tail, new_token);
     }
-	new_token = create_token(NULL, TOKEN_END, 0);
+	new_token = create_token(NULL, TOKEN_END);
 	add_token_to_list(&head, &tail, new_token);
 	return (head);
 }

@@ -7,8 +7,9 @@ t_cmd   *create_command(void)
     cmd = malloc(sizeof(t_cmd));
     if (!cmd)
         return (NULL);
-    cmd->args = NULL;
+    cmd->line = NULL;
     cmd->argc = 0;
+    cmd->args = NULL;
     cmd->redirs = NULL;
     cmd->next = NULL;
     return (cmd);
@@ -23,13 +24,14 @@ t_redir *create_redirection(t_token_type type, char *target)
         return (NULL);
     redir->type = type;
     redir->target = ft_strdup(target);
+    redir->fd = -1;
+    redir->ambiguous_flag = 0;
+    redir->should_expand = 1;
     if (!redir->target)
     {
         free(redir);
         return (NULL);
     }
-    redir->heredoc_content = NULL;
-    redir->heredoc_expand = 1;
     redir->next = NULL;
     return (redir);
 }
@@ -51,18 +53,18 @@ void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir)
     }
 }
 
-int validate_syntax(t_token *tokens)
+int validate_syntax(t_token *tokens, global_struct *global_struct)
 {
     while (tokens && tokens->type != TOKEN_END)
     {
         if (!check_pipe_errors(tokens))
-            return (0);
+            return (global_struct->last_exit_status = 258, 0);
         if (!check_redir_errors(tokens))
-            return (0);
+            return (global_struct->last_exit_status = 258, 0);
         tokens = tokens->next;
     }
     if (!check_pipe_end(tokens))
-        return (0);
+        return (global_struct->last_exit_status = 258, 0);
     return (1);
 }
 

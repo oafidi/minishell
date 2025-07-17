@@ -38,11 +38,10 @@ int check_pipe_end(t_token *tokens)
     return (1);
 }
 
-void	cleanup_command_on_error(t_cmd *cmd, int i)
+void	free_command(t_cmd *cmd)
 {
-	while (--i >= 0)
-		free(cmd->args[i]);
 	free(cmd->args);
 	free_redirections(cmd->redirs);
+    free(cmd->line);
 	free(cmd);
 }

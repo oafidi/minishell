@@ -3,9 +3,7 @@
 static t_cmd	*parse_single_command(t_token **token_ptr)
 {
 	t_cmd	*cmd;
-	int		i;
 
-	i = 0;
 	cmd = init_command_parsing(*token_ptr);
 	if (!cmd)
 		return (NULL);
@@ -14,17 +12,17 @@ static t_cmd	*parse_single_command(t_token **token_ptr)
 	{
 		if ((*token_ptr)->type == TOKEN_WORD)
 		{
-			if (!parse_word_token(cmd, token_ptr, &i))
-				return (cleanup_command_on_error(cmd, i), NULL);
+			if (!parse_word_token(cmd, token_ptr))
+				return (free_command(cmd), NULL);
 		}
 		else if ((*token_ptr)->type >= TOKEN_REDIR_IN
 			&& (*token_ptr)->type <= TOKEN_HEREDOC)
 		{
 			if (!parse_redirection_token(cmd, token_ptr))
-				return (cleanup_command_on_error(cmd, i), NULL);
+				return (free_command(cmd), NULL);
 		}
 	}
-	return (cmd->argc = i, cmd->args[i] = NULL, cmd);
+	return (cmd);
 }
 
 static t_cmd   *parse_pipeline(t_token **token_ptr)
@@ -56,9 +54,9 @@ static t_cmd   *parse_pipeline(t_token **token_ptr)
     return (head);
 }
 
-t_cmd   *parse_tokens(t_token *tokens)
+t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 {
-    if (!validate_syntax(tokens))
+    if (!tokens || !validate_syntax(tokens, global_struct))
         return (NULL);
     return (parse_pipeline(&tokens));
 }

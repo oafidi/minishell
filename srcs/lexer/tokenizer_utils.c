@@ -42,14 +42,14 @@ int get_word_length(char *str)
             quote = str[len];
         else if (str[len] == quote)
             quote = 0;
-        else if (quote == 0 && (is_space(str[len]) || is_metachar(str[len])))
+        else if (quote == 0 && (is_space(str[len]) || is_operator(str[len])))
             break;
         len++;
     }
     return (len);
 }
 
-t_token *create_token(char *value, t_token_type type, int should_expand)
+t_token *create_token(char *value, t_token_type type)
 {
     t_token *token;
     
@@ -58,7 +58,6 @@ t_token *create_token(char *value, t_token_type type, int should_expand)
         return (NULL);
     token->value = value;
     token->type = type;
-    token->should_expand = should_expand;
     token->next = NULL;
     token->prev = NULL;
     return (token);

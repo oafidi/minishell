@@ -5,7 +5,7 @@ int is_space(char c)
     return (c == ' ' || (c >= 9 && c <= 13));
 }
 
-int is_metachar(char c)
+int is_operator(char c)
 {
     return (c == '|' || c == '<' || c == '>');
 }

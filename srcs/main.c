@@ -1,62 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 01:50:59 by oafidi            #+#    #+#             */
+/*   Updated: 2025/07/17 04:46:42 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void print_redirs(t_redir *redir)
+int init_global_struct(global_struct *global_struct, char **env)
 {
-    while (redir)
-    {
-        printf("  REDIR type: %d, target: %s, heredoc_expand: %d\n",
-               redir->type, redir->target, redir->heredoc_expand);
-        redir = redir->next;
-    }
+    global_struct->cmds = 0;
+    global_struct->last_exit_status = 0;
+    global_struct->tokens = 0;
+    global_struct->env = copy_environment(env);
+    if (!global_struct->env)
+        return (ft_putstr_fd("Failed to copy environment!\n", 2), 0);
+    return (1);
 }
 
-void print_cmds(t_cmd *cmd)
+char    *ft_readline(global_struct *global_struct)
 {
-    int i;
-    int n = 1;
-    while (cmd)
+    char    *input;
+
+    input = readline("minishell-$ ");
+    if (!input)
     {
-        printf("=== Command %d ===\n", n++);
-        for (i = 0; cmd->args && cmd->args[i]; i++)
-            printf("  ARG[%d]: %s\n", i, cmd->args[i]);
-        print_redirs(cmd->redirs);
-        cmd = cmd->next;
+        rl_clear_history();
+		free_environment(global_struct->env);
+		free(global_struct);
+		ft_putstr_fd("exit\n", 2);
+		exit(global_struct->last_exit_status);
     }
+    else
+        add_history(input);
+    return (input);
 }
 
-int main(void)
+void    minishell_loop(char **env)
 {
-    char *input;
-    t_token *tokens;
-    t_cmd *cmds;
+    global_struct   global_struct;
+    char            *input;
 
+    if (!init_global_struct(&global_struct, env))
+        return ;
     while (1)
     {
-        input = readline("minishell> ");
-        if (!input)
-            break;
-        if (*input)
-            add_history(input);
-
-        tokens = lexer(input);
-        if (!tokens)
-        {
-            printf("Erreur de lexing.\n");
-            free(input);
-            continue;
-        }
-        cmds = parse_tokens(tokens);
-        if (!cmds)
-        {
-            printf("Erreur de parsing.\n");
-            free_token_list(tokens);
-            free(input);
-            continue;
-        }
-        print_cmds(cmds);
-        free_command_list(cmds);
-        free_token_list(tokens);
+        input = ft_readline(&global_struct);
+        global_struct.tokens = lexer(input, &global_struct);
+        global_struct.cmds = parser(&global_struct.tokens, &global_struct);
         free(input);
     }
-    return 0;
+}
+
+int main(int argc, char **argv, char **env)
+{
+    (void)argv;
+    if (argc != 1)
+        return (ft_putstr_fd("Invalid Arguments !", 2), 1);
+    minishell_loop(env);
+    return (0);
 }

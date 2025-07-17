@@ -23,31 +23,9 @@ void    free_redirections(t_redir *redirs)
         next = redirs->next;
         if (redirs->target)
             free(redirs->target);
-        if (redirs->heredoc_content)
-            free(redirs->heredoc_content);
         free(redirs);
         redirs = next;
     }
-}
-
-void    free_command(t_cmd *cmd)
-{
-    int i;
-    
-    if (!cmd)
-        return;
-    if (cmd->args)
-    {
-        while (i < cmd->argc)
-        {
-            if (cmd->args[i])
-                free(cmd->args[i]);
-            i++;
-        }
-        free(cmd->args);
-    }
-    free_redirections(cmd->redirs);
-    free(cmd);
 }
 
 void    free_command_list(t_cmd *commands)
