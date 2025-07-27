@@ -77,9 +77,12 @@ static t_cmd   *parse_pipeline(t_token **token_ptr)
 
 t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 {
+	t_cmd *head;
+
     if (!tokens || !validate_syntax(tokens, global_struct))
         return (NULL);
-    if (!parse_pipeline(&tokens))
+	head = parse_pipeline(&tokens);
+    if (!head)
         return (NULL);
-    return (expand_pipeline(global_struct));
+    return (expand_pipeline(head, global_struct));
 }

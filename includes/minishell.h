@@ -7,6 +7,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+#define NO_QUOTE 0
+#define SINGLE_QUOTE 1
+#define DOUBLE_QUOTE 2
+
 typedef enum e_token_type
 {
     TOKEN_WORD,
@@ -84,5 +88,12 @@ t_cmd	*init_command_parsing(t_token *token);
 t_redir *create_redirection(t_token_type type, char *target);
 void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
 void	free_command(t_cmd *cmd);
+int     ft_strcmp(char *s1, char *s2);
+char	*ft_strjoin_char(char *s1, char c);
+char	*get_env_value(t_env *env, char *name);
+void	process_heredoc_delimiter(t_redir *redir);
+int     check_quotes_type(char *str);
+char	*remove_quotes(char *target);
+int     check_quotes_type(char *str);
 
 # endif

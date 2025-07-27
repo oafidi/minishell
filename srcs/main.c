@@ -52,7 +52,7 @@ void    minishell_loop(char **env)
     {
         input = ft_readline(&global_struct);
         global_struct.tokens = lexer(input, &global_struct);
-        global_struct.cmds = parser(&global_struct.tokens, &global_struct);
+        global_struct.cmds = parser(global_struct.tokens, &global_struct);
         free(input);
     }
 }
