@@ -95,5 +95,6 @@ void	process_heredoc_delimiter(t_redir *redir);
 int     check_quotes_type(char *str);
 char	*remove_quotes(char *target);
 int     check_quotes_type(char *str);
+void	expand_redir_target(t_redir *redir, global_struct *global_struct);
 
 # endif
