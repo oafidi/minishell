@@ -90,11 +90,17 @@ void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
 void	free_command(t_cmd *cmd);
 int     ft_strcmp(char *s1, char *s2);
 char	*ft_strjoin_char(char *s1, char c);
-char	*get_env_value(t_env *env, char *name);
+char	*get_env_value(t_env *env_list, char *key);
 void	process_heredoc_delimiter(t_redir *redir);
 int     check_quotes_type(char *str);
 char	*remove_quotes(char *target);
 int     check_quotes_type(char *str);
 void	expand_redir_target(t_redir *redir, global_struct *global_struct);
+char	*ft_itoa(int n);
+int	    ft_isalnum(int c);
+int	    ft_isalpha(int c);
+int	    is_valid_var_char(char c);
+int	    is_valid_var_start(char c);
+void	update_quote_state(char c, int *quote_state);
 
 # endif

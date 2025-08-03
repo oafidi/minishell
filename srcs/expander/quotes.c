@@ -69,3 +69,21 @@ char	*remove_quotes(char *target)
 	}
 	return (clean[j] = 0, clean);
 }
+
+void	update_quote_state(char c, int *quote_state)
+{
+	if (c == '\'' && *quote_state != DOUBLE_QUOTE)
+	{
+		if (*quote_state == SINGLE_QUOTE)
+			*quote_state = NO_QUOTE;
+		else
+			*quote_state = SINGLE_QUOTE;
+	}
+	else if (c == '"' && *quote_state != SINGLE_QUOTE)
+	{
+		if (*quote_state == DOUBLE_QUOTE)
+			*quote_state = NO_QUOTE;
+		else
+			*quote_state = DOUBLE_QUOTE;
+	}
+}
