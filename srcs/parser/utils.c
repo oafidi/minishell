@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/03 03:42:46 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/03 03:42:48 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static t_cmd   *create_command(void)
@@ -74,7 +86,6 @@ static int count_command_args(t_token *start)
 t_cmd	*init_command_parsing(t_token *token)
 {
 	t_cmd	*cmd;
-    int		arg_count;
 
 	cmd = create_command();
 	if (!cmd)

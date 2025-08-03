@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/03 03:42:11 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/03 03:42:13 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	expand_redirections(t_redir *redir, global_struct *global_struct)
@@ -23,7 +35,8 @@ t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct)
     while (current)
     {
         expand_redirections(current->redirs, global_struct);
-        expand_line(current->line, global_struct);
+        //expand_line(current->line, global_struct);
         current = current->next;
     }
+	return (head);
 }

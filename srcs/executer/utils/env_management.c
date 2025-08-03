@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_management.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/03 03:41:56 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/03 03:41:58 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/minishell.h"
 
 static size_t	get_equal_index(const char *str)
@@ -9,7 +21,7 @@ static size_t	get_equal_index(const char *str)
 	return (i);
 }
 
-static t_env	*create_node(const char *str)
+static t_env	*create_node(char *str)
 {
 	t_env	*node;
 	size_t	eq_idx;

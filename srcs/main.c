@@ -6,7 +6,7 @@
 /*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 01:50:59 by oafidi            #+#    #+#             */
-/*   Updated: 2025/07/17 23:42:47 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/03 03:34:05 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char    *ft_readline(global_struct *global_struct)
     if (!input)
     {
         rl_clear_history();
-		free_environment(global_struct->env);
+		free_environment(&global_struct->env);
 		free(global_struct);
 		ft_putstr_fd("exit\n", 2);
 		exit(global_struct->last_exit_status);

@@ -6,7 +6,7 @@
 /*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 06:26:24 by oafidi            #+#    #+#             */
-/*   Updated: 2025/07/17 06:32:28 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/03 03:26:39 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!dest)
 		return (free(s1), NULL);
 	while (i < ft_strlen(s1))
-		dest[i] = s1[i++];
+	{
+		dest[i] = s1[i];
+		i++;
+	}
 	dest[i++] = ' ';
     j = 0;
 	while (s2[j])
