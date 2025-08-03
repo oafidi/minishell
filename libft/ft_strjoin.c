@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, char delimiter)
 {
 	size_t		len;
     char		*dest;
@@ -33,7 +33,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		dest[i] = s1[i];
 		i++;
 	}
-	dest[i++] = ' ';
+	dest[i++] = delimiter;
     j = 0;
 	while (s2[j])
 		dest[i++] = s2[j++];

@@ -50,7 +50,7 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 		if ((target[i] == '\'' || target[i] == '"'))
 		{
 			if (target[i] != quote_state && quote_state != NO_QUOTE)
-				result = ft_strjoin(result, target + i);
+				result = ft_strjoin(result, target + i, 0);
 			update_quote_state(target[i], &quote_state);
 			i++;
 		}
@@ -62,13 +62,13 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 			{
 				if (quote_state != DOUBLE_QUOTE && count_words(var_expansion) != 1)
 					redir->ambiguous_flag = 1;
-				result = ft_strjoin(result, var_expansion);
+				result = ft_strjoin(result, var_expansion, 0);
 				free(var_expansion);
 			}
 		}
 		else
 		{
-			result = ft_strjoin(result, target + i);
+			result = ft_strjoin(result, target + i, 0);
 			i++;
 		}
 		if (!result)

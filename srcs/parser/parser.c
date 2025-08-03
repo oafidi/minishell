@@ -12,9 +12,66 @@
 
 #include "../../includes/minishell.h"
 
+
+
+// just for test
+
+static const char *token_type_to_str(t_token_type type)
+{
+    if (type == TOKEN_WORD) return "WORD";
+    if (type == TOKEN_PIPE) return "PIPE";
+    if (type == TOKEN_REDIR_IN) return "REDIR_IN";
+    if (type == TOKEN_REDIR_OUT) return "REDIR_OUT";
+    if (type == TOKEN_APPEND) return "APPEND";
+    if (type == TOKEN_HEREDOC) return "HEREDOC";
+    if (type == TOKEN_END) return "END";
+    return "UNKNOWN";
+}
+
+void print_redir_list(t_redir *redir)
+{
+    int i = 0;
+    while (redir)
+    {
+        printf("    Redir %d: type = %-10s | target = \"%s\" | fd = %d | ambiguous = %d | expand = %d\n",
+            i,
+            token_type_to_str(redir->type),
+            redir->target ? redir->target : "(null)",
+            redir->fd,
+            redir->ambiguous_flag,
+            redir->should_expand);
+        redir = redir->next;
+        i++;
+    }
+}
+
+void print_cmd_list(t_cmd *cmd)
+{
+    int i = 0, j;
+    while (cmd)
+    {
+        printf("Command %d:\n", i);
+        printf("  line: \"%s\"\n", cmd->line ? cmd->line : "(null)");
+        printf("  argc: %d\n", cmd->argc);
+        printf("  args:");
+        if (cmd->args)
+        {
+            for (j = 0; j < cmd->argc; j++)
+                printf(" \"%s\"", cmd->args[j]);
+        }
+        printf("\n");
+        printf("  Redirections:\n");
+        print_redir_list(cmd->redirs);
+        cmd = cmd->next;
+        i++;
+    }
+}
+// just for test end
+
 static int	parse_word_token(t_cmd *cmd, t_token **token_ptr)
 {
-	cmd->line = ft_strjoin(cmd->line, (*token_ptr)->value);
+	cmd->line = ft_strjoin(cmd->line, (*token_ptr)->value, ' ');
+	*token_ptr = (*token_ptr)->next;
 	return (cmd->line != NULL);
 }
 
@@ -37,9 +94,9 @@ static t_cmd	*parse_single_command(t_token **token_ptr)
 {
 	t_cmd	*cmd;
 
-	cmd = init_command_parsing(*token_ptr);
+	cmd = init_command_parsing();
 	if (!cmd)
-		return (NULL);
+		return (NULL);	
 	while (*token_ptr && (*token_ptr)->type != TOKEN_PIPE
 		&& (*token_ptr)->type != TOKEN_END)
 	{
@@ -91,10 +148,14 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 {
 	t_cmd *head;
 
-    if (!tokens || !validate_syntax(tokens, global_struct))
-        return (NULL);
+    if (!tokens || !validate_syntax(tokens, global_struct)){
+		return (NULL);
+	}
 	head = parse_pipeline(&tokens);
-    if (!head)
-        return (NULL);
+    if (!head){
+		return (NULL);
+	}
+	printf("Parsed commands successfully.\n");
+	//print_cmd_list(head);
     return (expand_pipeline(head, global_struct));
 }

@@ -67,7 +67,7 @@ typedef struct global_struct
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_strdup(char *s1);
 size_t	ft_strlen(char *s);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *s1, char *s2, char delimiter);
 int     is_space(char c);
 int     is_operator(char c);
 int     is_quote(char c);
@@ -84,7 +84,7 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct);
 t_env	*copy_environment(char **env);
 void	free_environment(t_env **env);
 int     validate_syntax(t_token *tokens, global_struct *global_struct);
-t_cmd	*init_command_parsing(t_token *token);
+t_cmd	*init_command_parsing(void);
 t_redir *create_redirection(t_token_type type, char *target);
 void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
 void	free_command(t_cmd *cmd);
@@ -104,5 +104,8 @@ void	update_quote_state(char c, int *quote_state);
 t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct);
 char	*expand_variable(char *str, int *i, t_env *env_list, int exit_status);
 char	*ft_substr(char *s, size_t start, size_t len);
+
+
+void print_cmd_list(t_cmd *cmd);
 
 # endif
