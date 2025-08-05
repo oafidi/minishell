@@ -13,6 +13,7 @@ libft/ft_strdup.c \
 libft/ft_strjoin.c \
 libft/ft_strlen.c \
 libft/ft_substr.c \
+libft/ft_count_words.c \
 srcs/main.c \
 srcs/lexer/tokenizer.c \
 srcs/lexer/utils.c \

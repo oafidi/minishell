@@ -105,6 +105,8 @@ t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct);
 char	*expand_variable(char *str, int *i, t_env *env_list, int exit_status);
 char	*ft_substr(char *s, size_t start, size_t len);
 char	*ft_strjoin_char(char *s1, char c, char delimiter);
+int	    count_words(char start, char *s, char last);
+char    get_quote_char(int macro);
 
 void print_cmd_list(t_cmd *cmd);
 

@@ -12,60 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-static char	*join_three(char start, char *s, char last)
-{
-    size_t	len = (s ? ft_strlen(s) : 0);
-    char	*res;
-    size_t	i = 0, j = 0;
-    size_t	add = (start ? 1 : 0) + (last ? 1 : 0);
-
-    res = malloc(len + add + 1);
-    if (!res)
-        return (NULL);
-    if (start)
-        res[i++] = start;
-    if (s)
-        while (s[j])
-            res[i++] = s[j++];
-    if (last)
-        res[i++] = last;
-    res[i] = '\0';
-    return (res);
-}
-
-static int	count_words(char start, char *s, char last)
-{
-	int	count;
-	char 	*temp;
-	int i;
-
-	i = 0;
-	temp = join_three(start, s, last);
-	if (!temp)
-		return (0);
-	count = 0;
-	printf("Counting words in: %s\n", temp);
-	while (temp[i])
-	{
-		while (is_space(temp[i]))
-			i++;
-		if (temp[i])
-			count++;
-		while (temp[i] && !is_space(temp[i]))
-			i++;
-	}
-	return (count);
-}
-
-static char macro_to_char(int macro)
-{
-	if (macro == SINGLE_QUOTE)
-		return '\'';
-	else if (macro == DOUBLE_QUOTE)
-		return '"';
-	return 0;
-}
-
 static char	*expand_string(t_redir *redir, char *target, global_struct *global_struct)
 {
 	char	*result;
@@ -84,7 +30,7 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 	{
 		if ((target[i] == '\'' || target[i] == '"'))
 		{
-			if (target[i] != macro_to_char(quote_state) && quote_state != NO_QUOTE)
+			if (target[i] != get_quote_char(quote_state) && quote_state != NO_QUOTE)
 				result = ft_strjoin_char(result, target[i], 0);
 			update_quote_state(target[i], &quote_state);
 			i++;

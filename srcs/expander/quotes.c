@@ -99,3 +99,12 @@ void	update_quote_state(char c, int *quote_state)
 			*quote_state = DOUBLE_QUOTE;
 	}
 }
+
+char get_quote_char(int macro)
+{
+	if (macro == SINGLE_QUOTE)
+		return '\'';
+	else if (macro == DOUBLE_QUOTE)
+		return '"';
+	return 0;
+}
