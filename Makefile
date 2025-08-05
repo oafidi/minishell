@@ -21,6 +21,7 @@ srcs/parser/parser.c \
 srcs/parser/syntax_errors.c \
 srcs/parser/utils.c \
 srcs/expander/expand_heredoc.c \
+srcs/expander/expand_line.c \
 srcs/expander/expand_target.c \
 srcs/expander/expander.c \
 srcs/expander/quotes.c \

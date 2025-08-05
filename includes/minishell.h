@@ -107,6 +107,8 @@ char	*ft_substr(char *s, size_t start, size_t len);
 char	*ft_strjoin_char(char *s1, char c, char delimiter);
 int	    count_words(char start, char *s, char last);
 char    get_quote_char(int macro);
+void	expand_line(t_cmd *cmd, global_struct *global_struct);
+
 
 void print_cmd_list(t_cmd *cmd);
 

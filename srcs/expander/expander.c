@@ -35,7 +35,7 @@ t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct)
     while (current)
     {
         expand_redirections(current->redirs, global_struct);
-        //expand_line(current->line, global_struct);
+        expand_line(current, global_struct);
         current = current->next;
     }
 	return (head);
