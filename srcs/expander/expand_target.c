@@ -12,21 +12,47 @@
 
 #include "../../includes/minishell.h"
 
-static int	count_words(char *s)
+static char	*join_three(char start, char *s, char last)
+{
+    size_t	len = (s ? ft_strlen(s) : 0);
+    char	*res;
+    size_t	i = 0, j = 0;
+    size_t	add = (start ? 1 : 0) + (last ? 1 : 0);
+
+    res = malloc(len + add + 1);
+    if (!res)
+        return (NULL);
+    if (start)
+        res[i++] = start;
+    if (s)
+        while (s[j])
+            res[i++] = s[j++];
+    if (last)
+        res[i++] = last;
+    res[i] = '\0';
+    return (res);
+}
+
+static int	count_words(char start, char *s, char last)
 {
 	int	count;
+	char 	*temp;
+	int i;
 
+	i = 0;
+	temp = join_three(start, s, last);
+	if (!temp)
+		return (0);
 	count = 0;
-	while (*s)
+	printf("Counting words in: %s\n", temp);
+	while (temp[i])
 	{
-		while (is_space(*s))
-			s++;
-		if (*s)
+		while (is_space(temp[i]))
+			i++;
+		if (temp[i])
 			count++;
-		else
-			return (1);
-		while (*s && !is_space(*s))
-			s++;
+		while (temp[i] && !is_space(temp[i]))
+			i++;
 	}
 	return (count);
 }
@@ -46,7 +72,7 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 	char	*var_expansion;
 	int		i;
 	int		quote_state;
-
+	int last_index;
 	if (!target)
 		return (NULL);
 	result = ft_strdup("");
@@ -70,7 +96,11 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 			printf("Variable expansion: %s\n", var_expansion);
 			if (var_expansion)
 			{
-				if (quote_state == NO_QUOTE && count_words(var_expansion) != 1){
+				last_index = ft_strlen(result) - 1;
+				if (last_index < 0)
+					last_index = 0;
+				if (quote_state == NO_QUOTE && count_words(result[last_index],var_expansion, target[i]) != 1){
+					printf("result: |%c|, var_expansion: |%s|, target[i]: |%c|\n", result[last_index], var_expansion, target[i]);
 					redir->ambiguous_flag = 1;
 					printf("Ambiguous redirection: %s\n", var_expansion);
 				}
