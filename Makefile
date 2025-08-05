@@ -6,6 +6,7 @@ SRC = \
 libft/ft_isalnum.c \
 libft/ft_isalpha.c \
 libft/ft_itoa.c \
+libft/ft_strjoin_char.c \
 libft/ft_putstr_fd.c \
 libft/ft_strcmp.c \
 libft/ft_strdup.c \

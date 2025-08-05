@@ -31,6 +31,15 @@ static int	count_words(char *s)
 	return (count);
 }
 
+static char macro_to_char(int macro)
+{
+	if (macro == SINGLE_QUOTE)
+		return '\'';
+	else if (macro == DOUBLE_QUOTE)
+		return '"';
+	return 0;
+}
+
 static char	*expand_string(t_redir *redir, char *target, global_struct *global_struct)
 {
 	char	*result;
@@ -49,8 +58,8 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 	{
 		if ((target[i] == '\'' || target[i] == '"'))
 		{
-			if (target[i] != quote_state && quote_state != NO_QUOTE)
-				result = ft_strjoin(result, target + i, 0);
+			if (target[i] != macro_to_char(quote_state) && quote_state != NO_QUOTE)
+				result = ft_strjoin_char(result, target[i], 0);
 			update_quote_state(target[i], &quote_state);
 			i++;
 		}
@@ -58,29 +67,33 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 		{
 			var_expansion = expand_variable(target, &i, global_struct->env,
 											global_struct->last_exit_status);
+			printf("Variable expansion: %s\n", var_expansion);
 			if (var_expansion)
 			{
-				if (quote_state != DOUBLE_QUOTE && count_words(var_expansion) != 1)
+				if (quote_state == NO_QUOTE && count_words(var_expansion) != 1){
 					redir->ambiguous_flag = 1;
+					printf("Ambiguous redirection: %s\n", var_expansion);
+				}
 				result = ft_strjoin(result, var_expansion, 0);
+				printf("Expanded result: %s\n", result);
 				free(var_expansion);
 			}
 		}
 		else
 		{
-			result = ft_strjoin(result, target + i, 0);
+			result = ft_strjoin_char(result, target[i], 0);
 			i++;
 		}
 		if (!result)
 			return (NULL);
 	}
+	printf("Final expanded result: %s\n", result);
 	return (result);
 }
 
 void	expand_redir_target(t_redir *redir, global_struct *global_struct)
 {
 	char	*expanded;
-	int		word_count;
 
 	if (!redir || !redir->target || !global_struct)
 		return ;
@@ -90,9 +103,6 @@ void	expand_redir_target(t_redir *redir, global_struct *global_struct)
 		redir->ambiguous_flag = 1;
 		return ;
 	}
-	word_count = count_words(expanded);
-	if (word_count != 1)
-		return (redir->ambiguous_flag = 1, free(expanded));
 	free(redir->target);
 	redir->target = expanded;
 }
