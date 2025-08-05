@@ -39,19 +39,14 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 		{
 			var_expansion = expand_variable(target, &i, global_struct->env,
 											global_struct->last_exit_status);
-			printf("Variable expansion: %s\n", var_expansion);
 			if (var_expansion)
 			{
 				last_index = ft_strlen(result) - 1;
 				if (last_index < 0)
 					last_index = 0;
-				if (quote_state == NO_QUOTE && count_words(result[last_index],var_expansion, target[i]) != 1){
-					printf("result: |%c|, var_expansion: |%s|, target[i]: |%c|\n", result[last_index], var_expansion, target[i]);
+				if (quote_state == NO_QUOTE && count_words(result[last_index],var_expansion, target[i]) != 1)
 					redir->ambiguous_flag = 1;
-					printf("Ambiguous redirection: %s\n", var_expansion);
-				}
 				result = ft_strjoin(result, var_expansion, 0);
-				printf("Expanded result: %s\n", result);
 				free(var_expansion);
 			}
 		}
@@ -63,7 +58,6 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 		if (!result)
 			return (NULL);
 	}
-	printf("Final expanded result: %s\n", result);
 	return (result);
 }
 
