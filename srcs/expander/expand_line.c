@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static char    *expand(char *line, global_struct *global_struct)
+char    *expand(char *line, global_struct *global_struct)
 {
     char	*result;
     int		i;
@@ -74,8 +74,8 @@ void	expand_line(t_cmd *cmd, global_struct *global_struct)
         return ;
     if (is_export_case(cmd->line, global_struct))
     {
-        //expanded = expand_export(cmd->line, global_struct);
-        //free(cmd->line);
+        expanded = expand_export(cmd->line, global_struct);
+        free(cmd->line);
     }
     else
     {

@@ -21,7 +21,7 @@ static size_t	get_equal_index(const char *str)
 	return (i);
 }
 
-static t_env	*create_node(char *str)
+t_env	*create_node(char *str)
 {
 	t_env	*node;
 	size_t	eq_idx;
@@ -35,7 +35,7 @@ static t_env	*create_node(char *str)
 		node->value = ft_strdup(str + eq_idx + 1);
 	else
 		node->value = ft_strdup("");
-	node->next = NULL;
+	node->next = NULL; 
 	return (node);
 }
 
