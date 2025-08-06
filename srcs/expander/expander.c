@@ -26,6 +26,23 @@ static void	expand_redirections(t_redir *redir, global_struct *global_struct)
 		current = current->next;
 	}
 }
+static char	**remove_quotes_from_args(char **args)
+{
+    int		i;
+    char	*tmp;
+
+    if (!args)
+        return (NULL);
+    i = 0;
+    while (args[i])
+    {
+        tmp = remove_quotes(args[i]);
+        free(args[i]);
+        args[i] = tmp;
+        i++;
+    }
+    return (args);
+}
 
 t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct)
 {
@@ -36,6 +53,7 @@ t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct)
     {
         expand_redirections(current->redirs, global_struct);
         expand_line(current, global_struct);
+		current->args = remove_quotes_from_args(line_to_args(current->line));
         current = current->next;
     }
 	return (head);

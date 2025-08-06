@@ -54,3 +54,30 @@ int	count_words(char start, char *s, char last)
 	free(temp);
 	return (count);
 }
+
+
+void	free_args(char **p, int n_words)
+{
+	int	i;
+
+	i = 0;
+	if (!p || !(*p))
+		return ;
+	if (n_words == -1)
+	{
+		while (p[i])
+		{
+			free(p[i]);
+			i++;
+		}
+	}
+	else
+	{
+		while (i < n_words)
+		{
+			free(p[i]);
+			i++;
+		}
+	}
+	free(p);
+}

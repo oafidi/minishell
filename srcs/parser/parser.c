@@ -47,17 +47,19 @@ void print_redir_list(t_redir *redir)
 
 void print_cmd_list(t_cmd *cmd)
 {
-    int i = 0, j;
+    int i = 0, j= 0;
     while (cmd)
     {
         printf("Command %d:\n", i);
         printf("  line: \"%s\"\n", cmd->line ? cmd->line : "(null)");
-        printf("  argc: %d\n", cmd->argc);
         printf("  args:");
         if (cmd->args)
         {
-            for (j = 0; j < cmd->argc; j++)
+            while (cmd->args[j])
+            {
                 printf(" \"%s\"", cmd->args[j]);
+                j++;
+            }
         }
         printf("\n");
         printf("  Redirections:\n");

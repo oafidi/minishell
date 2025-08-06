@@ -9,7 +9,9 @@ libft/ft_itoa.c \
 libft/ft_strjoin_char.c \
 libft/ft_putstr_fd.c \
 libft/ft_strcmp.c \
+libft/ft_strncmp.c \
 libft/ft_strdup.c \
+libft/ft_strndup.c \
 libft/ft_strjoin.c \
 libft/ft_strlen.c \
 libft/ft_substr.c \
@@ -22,6 +24,8 @@ srcs/parser/syntax_errors.c \
 srcs/parser/utils.c \
 srcs/expander/expand_heredoc.c \
 srcs/expander/expand_line.c \
+srcs/expander/expand_export.c \
+srcs/expander/args_handler.c \
 srcs/expander/expand_target.c \
 srcs/expander/expander.c \
 srcs/expander/quotes.c \

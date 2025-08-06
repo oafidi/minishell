@@ -44,7 +44,6 @@ typedef struct s_cmd
 {
     char			*line;
     char            **args;
-    int             argc;
     t_redir         *redirs;
     struct s_cmd    *next;
 }   t_cmd;
@@ -108,7 +107,11 @@ char	*ft_strjoin_char(char *s1, char c, char delimiter);
 int	    count_words(char start, char *s, char last);
 char    get_quote_char(int macro);
 void	expand_line(t_cmd *cmd, global_struct *global_struct);
-
+int	    ft_strncmp(char *s1, char *s2, size_t n);
+char    *expand_export(char *line, global_struct *global_struct);
+char	*ft_strndup(char *s, size_t n);
+void	free_args(char **p, int n_words);
+char	**line_to_args(char *line);
 
 void print_cmd_list(t_cmd *cmd);
 

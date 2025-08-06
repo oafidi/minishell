@@ -58,7 +58,6 @@ t_cmd	*init_command_parsing(void)
     if (!cmd)
         return (NULL);
     cmd->line = NULL;
-    cmd->argc = 0;
     cmd->args = NULL;
     cmd->redirs = NULL;
     cmd->next = NULL;
