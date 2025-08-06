@@ -21,7 +21,7 @@ static size_t	get_equal_index(const char *str)
 	return (i);
 }
 
-t_env	*create_node(char *str)
+t_env	*create_node(char *str, int add_equal)
 {
 	t_env	*node;
 	size_t	eq_idx;
@@ -30,11 +30,16 @@ t_env	*create_node(char *str)
 	if (!node)
 		return (NULL);
 	eq_idx = get_equal_index(str);
-	node->key = ft_substr(str, 0, eq_idx);
 	if (str[eq_idx] == '=')
-		node->value = ft_strdup(str + eq_idx + 1);
+    {
+        node->key = ft_substr(str, 0, eq_idx + add_equal);
+        node->value = ft_strdup(str + eq_idx + 1);
+    }
 	else
-		node->value = ft_strdup("");
+    {
+        node->key = ft_substr(str, 0, eq_idx);
+        node->value = ft_strdup("");
+    }
 	node->next = NULL; 
 	return (node);
 }
@@ -47,7 +52,7 @@ t_env	*copy_environment(char **env)
 
 	while (env && *env)
 	{
-		new = create_node(*env);
+		new = create_node(*env, 0);
 		if (!new)
 			return (NULL);
 		if (!head)
