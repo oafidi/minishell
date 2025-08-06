@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char    *expand(char *line, global_struct *global_struct)
+char    *expand(char *line, global_struct *global_struct, int start_quote_state)
 {
     char	*result;
     int		i;
@@ -12,7 +12,7 @@ char    *expand(char *line, global_struct *global_struct)
     if (!result)
         return (NULL);
     i = 0;
-    quote_state = NO_QUOTE;
+    quote_state = start_quote_state;
     while (line[i])
     {
         if ((line[i] == '\'' || line[i] == '"'))
@@ -51,7 +51,7 @@ static int is_export_case(char *line, global_struct *global_struct)
 
     if (!line || !global_struct)
         return (0);
-    temp = expand(line, global_struct);
+    temp = expand(line, global_struct, NO_QUOTE);
     if (!temp)
         return (0);
     expanded = remove_quotes(temp);
@@ -79,7 +79,7 @@ void	expand_line(t_cmd *cmd, global_struct *global_struct)
     }
     else
     {
-        expanded = expand(cmd->line, global_struct);
+        expanded = expand(cmd->line, global_struct, NO_QUOTE);
 		free(cmd->line);
     }
     cmd->line = expanded;

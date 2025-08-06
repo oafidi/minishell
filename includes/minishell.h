@@ -112,7 +112,7 @@ char    *expand_export(char *line, global_struct *global_struct);
 char	*ft_strndup(char *s, size_t n);
 void	free_args(char **p, int n_words);
 char	**line_to_args(char *line);
-char    *expand(char *line, global_struct *global_struct);
+char    *expand(char *line, global_struct *global_struct, int start_quote_state);
 t_env	*create_node(char *str, int add_equal);
 
 void print_cmd_list(t_cmd *cmd);

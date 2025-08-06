@@ -34,14 +34,13 @@ static char *remove_and_add_quotes(char *value)
     free(result);
     return (value);
 }
-static char    *expand_env_value(char *value, int should_split, global_struct *global_struct)
+static char    *expand_env_value(char *value, int should_split, global_struct *global_struct, int quote_state)
 {
     char    *result;
     char    **arr;
     int     i;
 
-    result = expand(value, global_struct);
-    printf("Expanded value: %s\n", result);
+    result = expand(value, global_struct, quote_state);
     if (!result)
         return (free(value), NULL);
     i = 0;
@@ -54,11 +53,29 @@ static char    *expand_env_value(char *value, int should_split, global_struct *g
             return (NULL);
         result = NULL;
         while (arr[i])
-            value = ft_strjoin(result, arr[i++], ' ');
+            result = ft_strjoin(result, arr[i++], ' ');
     }
     else
         result = remove_and_add_quotes(result);
     return (free_args(arr, i), result);
+}
+
+int handle_quote_state(char *str)
+{
+    int i;
+    int quote_state;
+
+    if (!str)
+        return (0);
+    i = 0;
+    quote_state = NO_QUOTE;
+    while (str[i])
+    {
+        if (str[i] == '\'' || str[i] == '"')
+            update_quote_state(str[i], &quote_state);
+        i++;
+    }
+    return (quote_state);
 }
 
 static char *expand_arg(char *arg, int should_split, global_struct *global_struct)
@@ -74,12 +91,12 @@ static char *expand_arg(char *arg, int should_split, global_struct *global_struc
         return (NULL);
     temp = env->key;
     should_split_value = should_split || (check_quotes_type(env->key) != NO_QUOTE);
-    env->key = expand(temp, global_struct);
+    env->key = expand(temp, global_struct, NO_QUOTE);
     free(temp);
     if (!env->key)
         return (free_environment(&env), NULL);
     temp = env->value;
-    env->value = expand_env_value(temp, should_split_value, global_struct);
+    env->value = expand_env_value(temp, should_split_value, global_struct, handle_quote_state(env->key));
     free(temp);
     return (build_line_from_env(env, global_struct));
 }
