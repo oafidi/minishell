@@ -15,7 +15,7 @@
 int	handle_input_redirection(char *file, int ambiguous_flag)
 {
 	int	fd;
-	printf("this is rederection in\n");
+
 	if (ambiguous_flag == 1)
 		return (perror("amgiguous redirect\n"), -1);
 	fd = open(file, O_RDONLY);
@@ -77,11 +77,11 @@ int	handle_redirections(t_cmd *cmd)
 		if (result == 0)
 		{
 			if (r->type == TOKEN_REDIR_IN)
-				result = handle_input_redirection(r->file, r->ambiguous_flag);
+				result = handle_input_redirection(r->target, r->ambiguous_flag);
 			else if (r->type == TOKEN_REDIR_OUT)
-				result = handle_output_redirection(r->file);
+				result = handle_output_redirection(r->target);
 			else if (r->type == TOKEN_APPEND)
-				result = handle_append_redirection(r->file);
+				result = handle_append_redirection(r->target);
 			else if (r->type == TOKEN_HEREDOC)
 				result = handle_input_redirection(r->file, r->ambiguous_flag);
 			if (result == -1)
