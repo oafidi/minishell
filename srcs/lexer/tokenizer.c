@@ -71,7 +71,7 @@ static t_token	*handle_word(char **input)
 	return (create_token(word, TOKEN_WORD));
 }
 
-t_token *lexer(char *input, global_struct *global_struct)
+t_token *lexer(char *input)
 {
 	t_token	*head;
 	t_token	*tail;
@@ -80,7 +80,7 @@ t_token *lexer(char *input, global_struct *global_struct)
     head = NULL;
     tail = NULL;
     if (!input || !check_quotes_balance(input))
-        return (global_struct->last_exit_status = 1, NULL);
+        return (exit_status_set(1), NULL);
     while (*input)
     {
         while (is_space(*input))

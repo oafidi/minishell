@@ -50,17 +50,17 @@ static int check_pipe_end(t_token *tokens)
     return (1);
 }
 
-int validate_syntax(t_token *tokens, global_struct *global_struct)
+int validate_syntax(t_token *tokens)
 {
     while (tokens && tokens->type != TOKEN_END)
     {
         if (!check_pipe_errors(tokens))
-            return (global_struct->last_exit_status = 258, 0);
+            return (exit_status_set(258), 0);
         if (!check_redir_errors(tokens))
-            return (global_struct->last_exit_status = 258, 0);
+            return (exit_status_set(258), 0);
         tokens = tokens->next;
     }
     if (!check_pipe_end(tokens))
-        return (global_struct->last_exit_status = 258, 0);
+        return (exit_status_set(258), 0);
     return (1);
 }

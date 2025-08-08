@@ -38,7 +38,7 @@ static char	*expand_string(t_redir *redir, char *target, global_struct *global_s
 		else if (target[i] == '$' && quote_state != SINGLE_QUOTE)
 		{
 			var_expansion = expand_variable(target, &i, global_struct->env,
-											global_struct->last_exit_status);
+											*exit_status_get());
 			if (var_expansion)
 			{
 				last_index = ft_strlen(result) - 1;

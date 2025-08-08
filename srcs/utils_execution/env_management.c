@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 static size_t	get_equal_index(const char *str)
 {
@@ -30,6 +30,7 @@ t_env	*create_node(char *str, int add_equal)
 	if (!node)
 		return (NULL);
 	eq_idx = get_equal_index(str);
+	node->kv = ft_strdup(str);
 	if (str[eq_idx] == '=')
     {
         node->key = ft_substr(str, 0, eq_idx + add_equal);
@@ -50,6 +51,8 @@ t_env	*copy_environment(char **env)
 	t_env	*last = NULL;
 	t_env	*new;
 
+	if (!env || !*env)
+		return (build_minimal_env());
 	while (env && *env)
 	{
 		new = create_node(*env, 0);

@@ -24,7 +24,7 @@ char    *expand(char *line, global_struct *global_struct, int start_quote_state)
         else if (line[i] == '$' && quote_state != SINGLE_QUOTE)
         {
             char *var_expansion = expand_variable(line, &i, global_struct->env,
-                                                  global_struct->last_exit_status);
+                                                  *exit_status_get());
             if (var_expansion)
             {
                 result = ft_strjoin(result, var_expansion, 0);

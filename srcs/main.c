@@ -12,37 +12,12 @@
 
 #include "../includes/minishell.h"
 
-// just for test 
-const char *token_type_to_str(t_token_type type)
-{
-    if (type == TOKEN_WORD) return "WORD";
-    if (type == TOKEN_PIPE) return "PIPE";
-    if (type == TOKEN_REDIR_IN) return "REDIR_IN";
-    if (type == TOKEN_REDIR_OUT) return "REDIR_OUT";
-    if (type == TOKEN_APPEND) return "APPEND";
-    if (type == TOKEN_HEREDOC) return "HEREDOC";
-    if (type == TOKEN_END) return "END";
-    return "UNKNOWN";
-}
-
-void print_token_list(t_token *head)
-{
-    int i = 0;
-    while (head)
-    {
-        printf("Token %d: type = %-10s | value = \"%s\"\n", i,
-            token_type_to_str(head->type),
-            head->value ? head->value : "(null)");
-        head = head->next;
-        i++;
-    }
-}
-// just for test end
+int	g_sig = 0;
 
 int init_global_struct(global_struct *global_struct, char **env)
 {
     global_struct->cmds = 0;
-    global_struct->last_exit_status = 0;
+    exit_status_set(0);
     global_struct->tokens = 0;
     global_struct->env = copy_environment(env);
     if (!global_struct->env)
@@ -55,12 +30,14 @@ char    *ft_readline(global_struct *global_struct)
     char    *input;
 
     input = readline("minishell-$ ");
+    if (g_sig == 2)
+        g_sig = 0;
     if (!input)
     {
         rl_clear_history();
 		free_environment(&global_struct->env);
 		ft_putstr_fd("exit\n", 2);
-		exit(global_struct->last_exit_status);
+		exit(*exit_status_get());
     }
     else
         add_history(input);
@@ -70,18 +47,21 @@ char    *ft_readline(global_struct *global_struct)
 void    minishell_loop(char **env)
 {
     global_struct   global_struct;
+    char		    **heredoc;
     char            *input;
 
     if (!init_global_struct(&global_struct, env))
         exit(1);
     while (1)
     {
+        setup_signals();
         input = ft_readline(&global_struct);
-        //printf("Input: %s\n", input);
-        global_struct.tokens = lexer(input, &global_struct);
-        //print_token_list(global_struct.tokens);
+        global_struct.tokens = lexer(input);
         global_struct.cmds = parser(global_struct.tokens, &global_struct);
-        print_cmd_list(global_struct.cmds);
+        heredoc = herdoc_init(global_struct.tokens); // you need to protect malloc
+        execute_command(global_struct.cmds,  heredoc, &global_struct.env, count_heredocs(global_struct.tokens));
+        // print_cmd_list(global_struct.cmds);
+        // i need to free everything
         free(input);
     }
 }

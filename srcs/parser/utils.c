@@ -21,6 +21,7 @@ t_redir *create_redirection(t_token_type type, char *target)
         return (NULL);
     redir->type = type;
     redir->target = ft_strdup(target);
+    redir->file = NULL; // Initialize file for heredoc
     redir->fd = -1;
     redir->ambiguous_flag = 0;
     redir->should_expand = 1;
@@ -50,7 +51,7 @@ void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir)
     }
 }
 
-t_cmd	*init_command_parsing(void)
+t_cmd	*init_command_parsing(global_struct *global_struct)
 {
     t_cmd   *cmd;
     
@@ -60,6 +61,7 @@ t_cmd	*init_command_parsing(void)
     cmd->line = NULL;
     cmd->args = NULL;
     cmd->redirs = NULL;
+    cmd->env = global_struct->env;
     cmd->next = NULL;
     return (cmd);
 }

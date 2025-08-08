@@ -1,0 +1,115 @@
+minishell$ << m | << n | << b << p << o
+this is token  and token type 5
+this is token  and token type 5
+this is token  and token type 5
+this si count 2
+this is index 0
+> m
+this is index 1
+> n
+this is index 2
+=================================================================
+==45831==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6020000036c0 at pc 0x0001022f50a9 bp 0x7ffeed912f10 sp 0x7ffeed912f08
+WRITE of size 8 at 0x6020000036c0 thread T0
+    #0 0x1022f50a8 in handle_heredoc_input heredoc.c:87
+    #1 0x1022fa2ae in process_heredocs_for_command prepare_heredoc.c:39
+    #2 0x1022fa520 in herdocs_prepare prepare_heredoc.c:56
+    #3 0x1022f1e73 in execute_command test1.c:45
+    #4 0x1022efd74 in main main.c:251
+    #5 0x7fff716e3cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+0x6020000036c0 is located 0 bytes to the right of 16-byte region [0x6020000036b0,0x6020000036c0)
+allocated by thread T0 here:
+    #0 0x1023a717d in wrap_malloc+0x9d (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x4917d)
+    #1 0x1022f4efd in herdoc_init heredoc.c:32
+    #2 0x1022efd45 in main main.c:249
+    #3 0x7fff716e3cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow heredoc.c:87 in handle_heredoc_input
+Shadow bytes around the buggy address:
+  0x1c0400000680: fa fa fd fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x1c0400000690: fa fa fd fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x1c04000006a0: fa fa fd fa fa fa fd fa fa fa fd fa fa fa 01 fa
+  0x1c04000006b0: fa fa 02 fa fa fa 01 fa fa fa 02 fa fa fa 01 fa
+  0x1c04000006c0: fa fa 02 fa fa fa 01 fa fa fa 02 fa fa fa 01 fa
+=>0x1c04000006d0: fa fa 02 fa fa fa 00 00[fa]fa fd fa fa fa 00 00
+  0x1c04000006e0: fa fa 00 00 fa fa fd fa fa fa fd fa fa fa fd fa
+  0x1c04000006f0: fa fa fd fa fa fa fd fd fa fa fd fa fa fa fd fa
+  0x1c0400000700: fa fa 00 00 fa fa 00 00 fa fa 03 fa fa fa 03 fa
+  0x1c0400000710: fa fa 00 fa fa fa 00 fa fa fa 00 04 fa fa fd fa
+  0x1c0400000720: fa fa fd fa fa fa 00 00 fa fa 00 00 fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==45831==ABORTING
+[23]    45831 abort      ./execute
+
+
+
+
+
+
+
+
+
+
+
+
+cat | cat | ls
+
+bash-3.2$ unset PATh
+bash-3.2$ unset PATH
+bash-3.2$ ls
+bash: ls: No such file or directory
+bash-3.2$ ./ls
+bash: ./ls: No such file or directory
+bash-3.2$ pwd
+/mnt/homes/yettalib/Desktop/minihell
+bash-3.2$ cd 
+.DS_Store             .vscode/              minishell_finall_sig/ parsing/              
+bash-3.2$ cd minishell_finall_sig/minishell_v1-master/execution/
+bash-3.2$ ls
+bash: ls: Permission denied
+bash-3.2$ chmod 777 ls
+bash: chmod: No such file or directory
+bash-3.2$ /bin/chmod 777 ls
+bash-3.2$ ls
+bash-3.2$ ./ls
+
+
+
+
+
+
+
+
+➜  execution git:(main) ✗ env -i ./minishell 
+minishell$ ls
+PATH: Invalid argument
+
+
+
+
+
+
+
+ expand heredoc
+ message ambiguse
+ file | target 

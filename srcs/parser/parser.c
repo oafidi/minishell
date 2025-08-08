@@ -92,11 +92,11 @@ static int	parse_redirection_token(t_cmd *cmd, t_token **token_ptr)
 	return (1);
 }
 
-static t_cmd	*parse_single_command(t_token **token_ptr)
+static t_cmd	*parse_single_command(t_token **token_ptr, global_struct *global_struct)
 {
 	t_cmd	*cmd;
 
-	cmd = init_command_parsing();
+	cmd = init_command_parsing(global_struct);
 	if (!cmd)
 		return (NULL);	
 	while (*token_ptr && (*token_ptr)->type != TOKEN_PIPE
@@ -117,7 +117,7 @@ static t_cmd	*parse_single_command(t_token **token_ptr)
 	return (cmd);
 }
 
-static t_cmd   *parse_pipeline(t_token **token_ptr)
+static t_cmd   *parse_pipeline(t_token **token_ptr, global_struct *global_struct)
 {
     t_cmd *head;
     t_cmd *tail;
@@ -127,7 +127,7 @@ static t_cmd   *parse_pipeline(t_token **token_ptr)
     tail = NULL;
     while (*token_ptr && (*token_ptr)->type != TOKEN_END)
     {
-        new_cmd = parse_single_command(token_ptr);
+        new_cmd = parse_single_command(token_ptr, global_struct);
         if (!new_cmd)
             return (free_command_list(head), NULL);
         if (!head)
@@ -150,14 +150,14 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 {
 	t_cmd *head;
 
-    if (!tokens || !validate_syntax(tokens, global_struct)){
+    if (!tokens || !validate_syntax(tokens)){
 		return (NULL);
 	}
-	head = parse_pipeline(&tokens);
+	head = parse_pipeline(&tokens, global_struct);
     if (!head){
 		return (NULL);
 	}
-	printf("Parsed commands successfully.\n");
+	// printf("Parsed commands successfully.\n");
 	//print_cmd_list(head);
     return (expand_pipeline(head, global_struct));
 }
