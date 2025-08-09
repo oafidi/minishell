@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:22:26 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/07 16:14:18 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:12:35 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,21 @@ void	handle_sigint(int sig)
 	pid = waitpid(-1, NULL, WNOHANG);
 	if (g_sig == 0)
 	{
-		printf("before %d\n", *(exit_status_get()));
 		exit_status_set(130);
-		printf("after %d\n", *(exit_status_get()));
 		write(1, "\n", 1);
 	}
 	if (pid != 0)
 	{
 		if (g_sig == 2)
 		{
-			printf("before_heredoc %d\n", *(exit_status_get()));
 			exit_status_set(1);
-			printf("after_heredoc %d\n", *(exit_status_get()));
 			g_sig = 3;
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		}
 		else
 		{
 			g_sig = 0;
-			printf("before %d\n", *(exit_status_get()));
 			exit_status_set(1);
-			printf("after %d\n", *(exit_status_get()));
 			rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();

@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 03:42:38 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:42:39 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/08 20:03:47 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-
 // just for test
-
 static const char *token_type_to_str(t_token_type type)
 {
     if (type == TOKEN_WORD) return "WORD";
@@ -55,6 +52,7 @@ void print_cmd_list(t_cmd *cmd)
         printf("  args:");
         if (cmd->args)
         {
+            j = 0;
             while (cmd->args[j])
             {
                 printf(" \"%s\"", cmd->args[j]);
@@ -157,7 +155,5 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct)
     if (!head){
 		return (NULL);
 	}
-	// printf("Parsed commands successfully.\n");
-	//print_cmd_list(head);
     return (expand_pipeline(head, global_struct));
 }

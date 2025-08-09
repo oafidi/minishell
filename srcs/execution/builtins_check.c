@@ -6,11 +6,12 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 10:11:58 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/05 18:18:35 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:41:27 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 
 int	check_builtin(char *cmd)
 {

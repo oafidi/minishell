@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 01:50:59 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:34:05 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/08 15:58:04 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void    minishell_loop(char **env)
     char		    **heredoc;
     char            *input;
 
-    if (!init_global_struct(&global_struct, env))
+    if ((!init_global_struct(&global_struct, env)) || (!isatty(0) || !isatty(1)))
         exit(1);
     while (1)
     {
@@ -59,8 +59,8 @@ void    minishell_loop(char **env)
         global_struct.tokens = lexer(input);
         global_struct.cmds = parser(global_struct.tokens, &global_struct);
         heredoc = herdoc_init(global_struct.tokens); // you need to protect malloc
+        //print_cmd_list(global_struct.cmds);
         execute_command(global_struct.cmds,  heredoc, &global_struct.env, count_heredocs(global_struct.tokens));
-        // print_cmd_list(global_struct.cmds);
         // i need to free everything
         free(input);
     }

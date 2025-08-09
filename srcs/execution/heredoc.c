@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:06:25 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/07 18:23:27 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/08 12:47:05 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	**herdoc_init(t_token *tokens)
 	count = count_heredocs(tokens);
 	check_heredoc_limit(count);
 	table = malloc((count + 1) * sizeof(char *));
+	if (!table)
+		return (NULL);
 	return (table);
 }
 
@@ -50,7 +52,7 @@ char	*random_name_of_heredoc(void)
 	return (name);
 }
 
-static int	read_heredoc_loop(t_redir *redir)
+static int	read_heredoc_loop(t_redir *redir, t_env *env)
 {
 	char	*input;
 
@@ -67,14 +69,12 @@ static int	read_heredoc_loop(t_redir *redir)
 			free(input);
 			break ;
 		}
-		write(redir->fd, input, strlen(input));
-		write(redir->fd, "\n", 1);
-		free(input);
+		process_heredoc_line(input, redir, env);
 	}
 	return (0);
 }
 
-char	*handle_heredoc_input(t_redir *redir, char **heredocs, int index)
+char	*handle_heredoc_input(t_redir *redir, char **heredocs, t_env *env , int index)
 {
 	char	*filename;
 	int		interrupted;
@@ -87,7 +87,7 @@ char	*handle_heredoc_input(t_redir *redir, char **heredocs, int index)
 	if (redir->fd == -1)
 		return (NULL);
 	g_sig = 2;
-	interrupted = read_heredoc_loop(redir);
+	interrupted = read_heredoc_loop(redir, env);
 	close(redir->fd);
 	g_sig = 0;
 	if (interrupted)

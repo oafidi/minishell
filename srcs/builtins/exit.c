@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:35:35 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/06 12:40:39 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:13:37 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ int	ft_atoi(const char *str)
 	}
 	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
-		if (s == 1 && r > (LONG_MAX / 10))
-			return (-1);
-		else if (s == -1 && r > LONG_MAX / 10)
+		if (s == -1 && r > (LONG_MAX / 10))
 			return (0);
+		else if (s == 1 && r > LONG_MAX / 10)
+			return (-1);
 		r = r * 10 + str[i] - '0';
 		i++;
 	}
@@ -65,19 +65,19 @@ int ft_exit(char **args, int must_exit_)
 {
 	long code;
 
-	if (must_exit_)
+	if (must_exit_ && (isatty(0) && isatty(1)))
 		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args || !args[1])
 		exit(0);
-	if (!is_numeric(args[1]))
-	{
-		write(2, "exit: ", 6);
-		write(2, args[1], ft_strlen(args[1]));
-		write(2, ": numeric argument required\n", 29);
-		exit(255);
-	}
+	// if (!is_numeric(args[1]))
+	// {
+	// 	write(2, "exit: ", 6);
+	// 	write(2, args[1], ft_strlen(args[1]));
+	// 	write(2, ": numeric argument required\n", 29);
+	// 	exit(255);
+	// }
 	code = ft_atoi(args[1]);
-	if (((code == 0 && args[1][0] != '-') || (code == -1 && args[1][0] == '-')))
+	if (!is_numeric(args[1]) || ((code == 0 && args[1][0] != '-') || (code == 1 && args[1][0] == '-')))
 	{
 		write(2, "minishell: exit: ", 18);
 		write(2, args[1], ft_strlen(args[1]));

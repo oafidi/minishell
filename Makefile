@@ -38,7 +38,7 @@ srcs/execution/heredoc.c \
 srcs/execution/prepare_heredoc.c \
 srcs/execution/rederection.c \
 srcs/execution/signals.c \
-srcs/execution/test1.c \
+srcs/execution/execution_code.c \
 \
 srcs/expander/args_handler.c \
 srcs/expander/expander.c \

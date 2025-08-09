@@ -29,6 +29,9 @@
 # define NAME_OF_HEREDOC "/tmp/.heredoc_file"
 # define EXIT_STATUS "$?"
 
+# define AMBIGUOUS_MESSAGE "minishell: amgiguous redirect\n"
+# define TARGET_NOT_FOUND "minishell: No such file or directory\n"
+
 extern int	g_sig;
 
 typedef enum e_token_type
@@ -156,9 +159,11 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3);
 void	clean_string_array(char **arr);
 
 // heredocs
-char	*handle_heredoc_input(t_redir *redir, char **heredocs, int index);
+void	process_heredoc_line(char *line, t_redir *redir, t_env *env);
+char	*handle_heredoc_input(t_redir *redir, char **heredocs, t_env *env , int index);
 void	herdocs_clean(char **heredocs, int count);
-void	herdocs_prepare(t_cmd *cmd_list, char **heredoc);
+// void	herdocs_prepare(t_cmd *cmd_list, char **heredoc);
+int     herdocs_prepare(t_cmd *cmd_list, char **heredoc);
 char	**herdoc_init(t_token *tokens);
 int		count_heredocs(t_token *tokens);
 

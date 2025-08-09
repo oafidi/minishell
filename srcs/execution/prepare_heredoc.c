@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:08:58 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/03 15:58:49 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:24:48 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,27 @@ int	count_heredocs(t_token *tokens)
 	return (count);
 }
 
-void	process_heredocs_for_command(t_cmd *cmd, char **heredoc, int *index)
+// void	process_heredocs_for_command(t_cmd *cmd, char **heredoc, int *index)
+// {
+// 	t_redir	*redir;
+// 	char	*file;
+
+// 	redir = cmd->redirs;
+// 	while (redir)
+// 	{
+// 		if (redir->type == TOKEN_HEREDOC)
+// 		{
+// 			file = handle_heredoc_input(redir, heredoc, *index);
+// 			if (!file)
+// 				return ;
+// 			redir->file = file;
+// 			(*index)++;
+// 		}
+// 		redir = redir->next;
+// 	}
+// }
+
+static int process_heredocs_for_command(t_cmd *cmd, char **heredoc, int *index)
 {
 	t_redir	*redir;
 	char	*file;
@@ -36,27 +56,46 @@ void	process_heredocs_for_command(t_cmd *cmd, char **heredoc, int *index)
 	{
 		if (redir->type == TOKEN_HEREDOC)
 		{
-			file = handle_heredoc_input(redir, heredoc, *index);
+			file = handle_heredoc_input(redir, heredoc, cmd->env, *index);
 			if (!file)
-				return ;
+				return (1);
 			redir->file = file;
 			(*index)++;
 		}
 		redir = redir->next;
 	}
+	return (0);
 }
 
-void	herdocs_prepare(t_cmd *cmd_list, char **heredoc)
+
+// void	herdocs_prepare(t_cmd *cmd_list, char **heredoc)
+// {
+// 	int		heredoc_index;
+
+// 	heredoc_index = 0;
+// 	while (cmd_list)
+// 	{
+// 		process_heredocs_for_command(cmd_list, heredoc, &heredoc_index);
+// 		cmd_list = cmd_list->next;
+// 	}
+// }
+
+int herdocs_prepare(t_cmd *cmd_list, char **heredoc)
 {
 	int		heredoc_index;
+	int		status;
 
 	heredoc_index = 0;
 	while (cmd_list)
 	{
-		process_heredocs_for_command(cmd_list, heredoc, &heredoc_index);
+		status = process_heredocs_for_command(cmd_list, heredoc, &heredoc_index);
+		if (status == 1)
+			return (1);
 		cmd_list = cmd_list->next;
 	}
+	return (0);
 }
+
 
 void	herdocs_clean(char **heredocs, int count)
 {
