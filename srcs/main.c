@@ -39,7 +39,7 @@ char    *ft_readline(global_struct *global_struct)
 		ft_putstr_fd("exit\n", 2);
 		exit(*exit_status_get());
     }
-    else
+    else if (*input)
         add_history(input);
     return (input);
 }
