@@ -94,7 +94,5 @@ t_token *lexer(char *input)
 			return (free_token_list(head), NULL);
 		add_token_to_list(&head, &tail, new_token);
     }
-	new_token = create_token(NULL, TOKEN_END);
-	add_token_to_list(&head, &tail, new_token);
 	return (head);
 }

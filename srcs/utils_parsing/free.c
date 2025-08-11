@@ -23,6 +23,8 @@ void    free_redirections(t_redir *redirs)
         next = redirs->next;
         if (redirs->target)
             free(redirs->target);
+        if (redirs->file)
+            free(redirs->file);
         free(redirs);
         redirs = next;
     }
@@ -30,6 +32,17 @@ void    free_redirections(t_redir *redirs)
 
 void	free_command(t_cmd *cmd)
 {
+    int i;
+
+    if (cmd->args)
+    {
+        i = 0;
+        while (cmd->args[i])
+        {
+            free(cmd->args[i]);
+            i++;
+        }
+    }
 	free(cmd->args);
 	free_redirections(cmd->redirs);
     free(cmd->line);

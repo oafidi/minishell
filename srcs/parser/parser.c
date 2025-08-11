@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 03:42:38 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/08 20:03:47 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/09 19:31:58 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static const char *token_type_to_str(t_token_type type)
     if (type == TOKEN_REDIR_OUT) return "REDIR_OUT";
     if (type == TOKEN_APPEND) return "APPEND";
     if (type == TOKEN_HEREDOC) return "HEREDOC";
-    if (type == TOKEN_END) return "END";
     return "UNKNOWN";
 }
 
@@ -55,7 +54,7 @@ void print_cmd_list(t_cmd *cmd)
             j = 0;
             while (cmd->args[j])
             {
-                printf(" \"%s\"", cmd->args[j]);
+                printf(" \"%s\", %zu", cmd->args[j], ft_strlen(cmd->args[j]));
                 j++;
             }
         }
@@ -78,7 +77,7 @@ static int	parse_word_token(t_cmd *cmd, t_token **token_ptr)
 static int	parse_redirection_token(t_cmd *cmd, t_token **token_ptr)
 {
 	t_redir			*redir;
-	t_token_type	redir_type;
+	t_token_type    redir_type;
 
 	redir_type = (*token_ptr)->type;
 	*token_ptr = (*token_ptr)->next;
@@ -96,9 +95,8 @@ static t_cmd	*parse_single_command(t_token **token_ptr, global_struct *global_st
 
 	cmd = init_command_parsing(global_struct);
 	if (!cmd)
-		return (NULL);	
-	while (*token_ptr && (*token_ptr)->type != TOKEN_PIPE
-		&& (*token_ptr)->type != TOKEN_END)
+		return (NULL);
+	while (*token_ptr && (*token_ptr)->type != TOKEN_PIPE)
 	{
 		if ((*token_ptr)->type == TOKEN_WORD)
 		{
@@ -117,13 +115,13 @@ static t_cmd	*parse_single_command(t_token **token_ptr, global_struct *global_st
 
 static t_cmd   *parse_pipeline(t_token **token_ptr, global_struct *global_struct)
 {
-    t_cmd *head;
-    t_cmd *tail;
-    t_cmd *new_cmd;
+    t_cmd   *head;
+    t_cmd   *tail;
+    t_cmd   *new_cmd;
     
     head = NULL;
     tail = NULL;
-    while (*token_ptr && (*token_ptr)->type != TOKEN_END)
+    while (token_ptr && *token_ptr)
     {
         new_cmd = parse_single_command(token_ptr, global_struct);
         if (!new_cmd)
@@ -152,8 +150,7 @@ t_cmd   *parser(t_token *tokens, global_struct *global_struct)
 		return (NULL);
 	}
 	head = parse_pipeline(&tokens, global_struct);
-    if (!head){
+    if (!head)
 		return (NULL);
-	}
     return (expand_pipeline(head, global_struct));
 }

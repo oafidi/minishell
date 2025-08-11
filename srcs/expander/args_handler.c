@@ -48,7 +48,7 @@ static char	*extract_arg(char *str, int *i)
 	return (arg);
 }
 
-static int	count_args(char *str)
+int	count_args(char *str)
 {
 	int	i;
 	int	count;

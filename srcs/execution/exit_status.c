@@ -6,12 +6,11 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:22:15 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/06 14:58:24 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:14:41 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 
 int	*exit_status_get(void)
 {

@@ -21,6 +21,7 @@ libft/ft_strlen.c \
 libft/ft_strncmp.c \
 libft/ft_strndup.c \
 libft/ft_strrchr.c \
+libft/ft_atol.c \
 libft/ft_substr.c \
 \
 srcs/main.c \
@@ -38,6 +39,10 @@ srcs/execution/heredoc.c \
 srcs/execution/prepare_heredoc.c \
 srcs/execution/rederection.c \
 srcs/execution/signals.c \
+srcs/execution/execute_command.c \
+srcs/execution/execute_child.c \
+srcs/execution/execute_external.c \
+srcs/execution/execute_pipeline.c \
 srcs/execution/execution_code.c \
 \
 srcs/expander/args_handler.c \

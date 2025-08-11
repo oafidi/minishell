@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static void	expand_redirections(t_redir *redir, global_struct *global_struct)
+static int	expand_redirections(t_redir *redir, global_struct *global_struct)
 {
 	t_redir	*current;
 
@@ -20,11 +20,18 @@ static void	expand_redirections(t_redir *redir, global_struct *global_struct)
 	while (current)
 	{
 		if (current->type == TOKEN_HEREDOC)
-			process_heredoc_delimiter(current);
+        {
+            if (!process_heredoc_delimiter(current))
+                return (0);
+        }	
 		else
-			expand_redir_target(current, global_struct);
+        {
+            if (!expand_redir_target(current, global_struct))
+                return (0);
+        }
 		current = current->next;
 	}
+    return (1);
 }
 static char	**remove_quotes_from_args(char **args)
 {
@@ -46,13 +53,15 @@ static char	**remove_quotes_from_args(char **args)
 
 t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct)
 {
-    t_cmd *current;
+    t_cmd   *current;
 
     current = head;
     while (current)
     {
-        expand_redirections(current->redirs, global_struct);
-        expand_line(current, global_struct);
+        if (!expand_redirections(current->redirs, global_struct))
+            return (free_command_list(head), NULL);
+        if (!expand_line(current, global_struct))
+            return (free_command_list(head), NULL);
 		current->args = remove_quotes_from_args(line_to_args(current->line));
         current = current->next;
     }

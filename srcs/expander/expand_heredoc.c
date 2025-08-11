@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	process_heredoc_delimiter(t_redir *redir)
+int process_heredoc_delimiter(t_redir *redir)
 {
 	char	*clean_delimiter;
 
@@ -20,9 +20,10 @@ void	process_heredoc_delimiter(t_redir *redir)
 		redir->should_expand = 0;
 	clean_delimiter = remove_quotes(redir->target);
 	if (!clean_delimiter)
-		return ;
+		return (0);
 	free(redir->target);
 	redir->target = clean_delimiter;
+    return (1);
 }
 
 static char    *expand_heredoc(char *line, t_env *env)
@@ -39,7 +40,7 @@ static char    *expand_heredoc(char *line, t_env *env)
     {
         if (line[i] == '$')
         {
-            var_expansion = expand_variable(line, &i, env, *exit_status_get());
+            var_expansion = expand_variable(line, &i, env);
             if (var_expansion)
             {
                 result = ft_strjoin(result, var_expansion, 0);

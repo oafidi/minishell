@@ -1,16 +1,14 @@
 #include "../../includes/minishell.h"
 
-static char    *build_line_from_env(t_env *env, global_struct *global_struct)
+static char    *build_line_from_env(t_env *env)
 {
     char    *line;
     char    *temp;
-
-    if (!env || !global_struct)
-        return (free_environment(&env), NULL);
+    
     temp = ft_strdup(env->key);
     line = ft_strjoin(env->key, env->value, 0);
     env->key = temp;
-    return (free_environment(&env), line);
+    return (free_env_list(env), line);
 }
 
 static char *remove_and_add_quotes(char *value)
@@ -34,6 +32,7 @@ static char *remove_and_add_quotes(char *value)
     free(result);
     return (value);
 }
+
 static char    *expand_env_value(char *value, int should_split, global_struct *global_struct, int quote_state)
 {
     char    *result;
@@ -42,7 +41,7 @@ static char    *expand_env_value(char *value, int should_split, global_struct *g
 
     result = expand(value, global_struct, quote_state);
     if (!result)
-        return (free(value), NULL);
+        return (NULL);
     i = 0;
     arr = NULL;
     if (should_split)
@@ -54,10 +53,11 @@ static char    *expand_env_value(char *value, int should_split, global_struct *g
         result = NULL;
         while (arr[i])
             result = ft_strjoin(result, arr[i++], ' ');
+        free_args(arr, i);
     }
     else
         result = remove_and_add_quotes(result);
-    return (free_args(arr, i), result);
+    return (result);
 }
 
 int handle_quote_state(char *str)
@@ -84,7 +84,7 @@ static char *expand_arg(char *arg, int should_split, global_struct *global_struc
     char    *temp;
     int     should_split_value;
 
-    if (!arg || !global_struct)
+    if (!arg)
         return (NULL);
     env = create_node(arg, 1);
     if (!env)
@@ -94,11 +94,13 @@ static char *expand_arg(char *arg, int should_split, global_struct *global_struc
     env->key = expand(temp, global_struct, NO_QUOTE);
     free(temp);
     if (!env->key)
-        return (free_environment(&env), NULL);
+        return (free_env_list(env), NULL);
     temp = env->value;
     env->value = expand_env_value(temp, should_split_value, global_struct, handle_quote_state(env->key));
     free(temp);
-    return (build_line_from_env(env, global_struct));
+    if (!env->value)
+        return (free_env_list(env), NULL);
+    return (build_line_from_env(env));
 }
 
 char *expand_export(char *line, global_struct *global_struct)
@@ -109,8 +111,6 @@ char *expand_export(char *line, global_struct *global_struct)
     char    **arr;
     int     i;
 
-    if (!line || !global_struct)
-        return (NULL);
     arr = line_to_args(line);
     if (!arr)
         return (NULL);
@@ -121,11 +121,11 @@ char *expand_export(char *line, global_struct *global_struct)
     {
         expanded = expand_arg(arr[i], should_split, global_struct);
         if (!expanded)
-            return (free_args(arr, i), NULL);
+            return (free_args(arr, count_args(line)), NULL);
         result = ft_strjoin(result, expanded, ' ');
         free(expanded);
         if (!result)
-            return (free_args(arr, i), NULL);
+            return (free_args(arr, count_args(line)), NULL);
         i++;
     }
     return (free_args(arr, i),result);

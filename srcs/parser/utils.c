@@ -21,7 +21,7 @@ t_redir *create_redirection(t_token_type type, char *target)
         return (NULL);
     redir->type = type;
     redir->target = ft_strdup(target);
-    redir->file = NULL; // Initialize file for heredoc
+    redir->file = NULL;
     redir->fd = -1;
     redir->ambiguous_flag = 0;
     redir->should_expand = 1;

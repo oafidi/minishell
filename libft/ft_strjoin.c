@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-static size_t	calc_len(char *s1, char *s2, char delimiter)
+static size_t	calculate_len(char *s1, char *s2, char delimiter)
 {
     if (delimiter)
         return ft_strlen(s1) + ft_strlen(s2) + 1;
@@ -30,7 +30,7 @@ char	*ft_strjoin(char *s1, char *s2, char delimiter)
         return (ft_strdup(s2));
     if (!s2)
         return (ft_strdup(s1));
-    len = calc_len(s1, s2, delimiter);
+    len = calculate_len(s1, s2, delimiter);
     dest = malloc(sizeof(char) * (len + 1));
     if (!dest)
         return (free(s1), NULL);

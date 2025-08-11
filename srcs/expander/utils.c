@@ -22,7 +22,7 @@ static char	*extract_var_name(char *str, int *len)
 		return (NULL);
 	while (str[*len] && is_valid_var_char(str[*len]))
 		(*len)++;
-	var_name = malloc(sizeof(char) * (*len + 1));
+	var_name = malloc(sizeof(char) * (*len + 1)); // testi had lblassa
 	if (!var_name)
 		return (NULL);
 	i = -1;
@@ -32,23 +32,23 @@ static char	*extract_var_name(char *str, int *len)
 	return (var_name);
 }
 
-char	*expand_variable(char *str, int *i, t_env *env_list, int exit_status)
+char	*expand_variable(char *str, int *i, t_env *env_list)
 {
-	char	*var_name;
 	char	*var_value;
-	char	*result;
+	char	*var_name;
 	int		var_len;
 
 	if (str[*i + 1] == '?')
-		return (*i += 2, ft_itoa(exit_status));
+		return (*i += 2, ft_itoa(*exit_status_get()));
 	var_name = extract_var_name(str + *i + 1, &var_len);
 	if (!var_name)
 		return ((*i)++, ft_strdup("$"));
+	if (!var_name)
+		return (NULL);
 	*i += var_len + 1;
 	var_value = get_env_value(env_list, var_name);
 	free(var_name);
 	if (!var_value)
 		return (ft_strdup(""));
-	result = ft_strdup(var_value);
-	return (result);
+	return (ft_strdup(var_value));
 }

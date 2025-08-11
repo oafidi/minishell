@@ -45,6 +45,20 @@ t_env	*create_node(char *str, int add_equal)
 	return (node);
 }
 
+static char *increment_shlvl(char *value, char **kv)
+{
+	long shlvl;
+	char *new_vlaue;
+
+	shlvl = ft_atol(value);
+	shlvl++;
+	new_vlaue = ft_itoa(shlvl);
+	free(value);
+	free(*kv);
+	*kv = join_kv("SHLVL", new_vlaue);
+	return (new_vlaue);
+}
+
 t_env	*copy_environment(char **env)
 {
 	t_env	*head = NULL;
@@ -57,7 +71,9 @@ t_env	*copy_environment(char **env)
 	{
 		new = create_node(*env, 0);
 		if (!new)
-			return (NULL);
+			return (free_env_list(head), NULL);
+		if (!ft_strcmp(new->key, "SHLVL"))
+			new->value = increment_shlvl(new->value, &new->kv);
 		if (!head)
 			head = new;
 		else
@@ -66,20 +82,6 @@ t_env	*copy_environment(char **env)
 		env++;
 	}
 	return (head);
-}
-
-void	free_environment(t_env **env)
-{
-	t_env	*next;
-
-	while (*env)
-	{
-		next = (*env)->next;
-		free((*env)->key);
-		free((*env)->value);
-		free(*env);
-		*env = next;
-	}
 }
 
 char	*get_env_value(t_env *env_list, char *key)

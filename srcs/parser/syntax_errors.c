@@ -16,12 +16,12 @@ static int check_pipe_errors(t_token *tokens)
 {
     if (tokens->type == TOKEN_PIPE && tokens->prev == NULL)
     {
-        ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+        ft_putstr_fd(PIPE_ERROR, 2);
         return (0);
     }
-    if (tokens->type == TOKEN_PIPE && tokens->prev && tokens->prev->type == TOKEN_PIPE)
+    if (tokens->type == TOKEN_PIPE && tokens->prev && tokens->prev->type != TOKEN_WORD)
     {
-        ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+        ft_putstr_fd(PIPE_ERROR, 2);
         return (0);
     }
     return (1);
@@ -31,9 +31,17 @@ static int check_redir_errors(t_token *tokens)
 {
     if (tokens->type >= TOKEN_REDIR_IN && tokens->type <= TOKEN_HEREDOC)
     {
-        if (!tokens->next || tokens->next->type != TOKEN_WORD)
+        if (!tokens->next)
         {
-            ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+            ft_putstr_fd(REDIRECTION_ERROR, 2);
+            return (0);
+        }
+        if (tokens->next->type != TOKEN_WORD)
+        {
+            if (tokens->next->type == TOKEN_PIPE)
+                ft_putstr_fd(PIPE_ERROR, 2);
+            else
+                ft_putstr_fd(REDIRECTION_ERROR, 2);
             return (0);
         }
     }
@@ -42,9 +50,9 @@ static int check_redir_errors(t_token *tokens)
 
 static int check_pipe_end(t_token *tokens)
 {
-    if (tokens && tokens->prev && tokens->prev->type == TOKEN_PIPE)
+    if (tokens && tokens->type == TOKEN_PIPE)
     {
-        ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+        ft_putstr_fd(PIPE_ERROR, 2);
         return (0);
     }
     return (1);
@@ -52,15 +60,18 @@ static int check_pipe_end(t_token *tokens)
 
 int validate_syntax(t_token *tokens)
 {
-    while (tokens && tokens->type != TOKEN_END)
+    t_token *last;
+
+    while (tokens)
     {
         if (!check_pipe_errors(tokens))
             return (exit_status_set(258), 0);
-        if (!check_redir_errors(tokens))
+        else if (!check_redir_errors(tokens))
             return (exit_status_set(258), 0);
+        last = tokens;
         tokens = tokens->next;
     }
-    if (!check_pipe_end(tokens))
+    if (!check_pipe_end(last))
         return (exit_status_set(258), 0);
     return (1);
 }

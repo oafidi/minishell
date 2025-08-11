@@ -12,67 +12,67 @@
 
 #include "../../includes/minishell.h"
 
-static char	*expand_string(t_redir *redir, char *target, global_struct *global_struct)
+static void	handle_quote(char *target, t_expand_ctx *ctx)
 {
-	char	*result;
-	char	*var_expansion;
-	int		i;
-	int		quote_state;
-	int last_index;
-	if (!target)
-		return (NULL);
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	i = 0;
-	quote_state = NO_QUOTE;
-	while (target[i])
-	{
-		if ((target[i] == '\'' || target[i] == '"'))
-		{
-			if (target[i] != get_quote_char(quote_state) && quote_state != NO_QUOTE)
-				result = ft_strjoin_char(result, target[i], 0);
-			update_quote_state(target[i], &quote_state);
-			i++;
-		}
-		else if (target[i] == '$' && quote_state != SINGLE_QUOTE)
-		{
-			var_expansion = expand_variable(target, &i, global_struct->env,
-											*exit_status_get());
-			if (var_expansion)
-			{
-				last_index = ft_strlen(result) - 1;
-				if (last_index < 0)
-					last_index = 0;
-				if (quote_state == NO_QUOTE && count_words(result[last_index],var_expansion, target[i]) != 1)
-					redir->ambiguous_flag = 1;
-				result = ft_strjoin(result, var_expansion, 0);
-				free(var_expansion);
-			}
-		}
-		else
-		{
-			result = ft_strjoin_char(result, target[i], 0);
-			i++;
-		}
-		if (!result)
-			return (NULL);
-	}
-	return (result);
+	if (target[ctx->i] != get_quote_char(ctx->quote_state) && ctx->quote_state != NO_QUOTE)
+		ctx->result = ft_strjoin_char(ctx->result, target[ctx->i], 0);
+	update_quote_state(target[(ctx->i)++], &ctx->quote_state);
 }
 
-void	expand_redir_target(t_redir *redir, global_struct *global_struct)
+static void	handle_var_expand(t_redir *redir, char *target, t_expand_ctx *ctx, global_struct *g)
+{
+	char	*var_exp;
+	int		last_index;
+
+	var_exp = expand_variable(target, &ctx->i, g->env);
+	if (!var_exp)
+	{
+		free(ctx->result);
+		ctx->result = NULL;
+		return ;
+	}
+	last_index = ft_strlen(ctx->result) - 1;
+	if (last_index < 0)
+		last_index = 0;
+	if (ctx->quote_state == NO_QUOTE && count_words(ctx->result[last_index], var_exp, target[ctx->i]) != 1)
+		redir->ambiguous_flag = 1;
+	ctx->result = ft_strjoin(ctx->result, var_exp, 0);
+	free(var_exp);
+}
+
+static char	*expand_target(t_redir *redir, char *target, global_struct *g)
+{
+	t_expand_ctx	ctx;
+
+	ctx.i = 0;
+	ctx.quote_state = NO_QUOTE;
+	ctx.result = ft_strdup("");
+	if (!ctx.result)
+		return (NULL);
+	while (target[ctx.i])
+	{
+		if (target[ctx.i] == '\'' || target[ctx.i] == '"')
+			handle_quote(target, &ctx);
+		else if (target[ctx.i] == '$' && ctx.quote_state != SINGLE_QUOTE)
+			handle_var_expand(redir, target, &ctx, g);
+		else
+			ctx.result = ft_strjoin_char(ctx.result, target[ctx.i++], 0);
+		if (!ctx.result)
+			return (NULL);
+	}
+	return (ctx.result);
+}
+
+int	expand_redir_target(t_redir *redir, global_struct *global_struct)
 {
 	char	*expanded;
 
-	if (!redir || !redir->target || !global_struct)
-		return ;
-	expanded = expand_string(redir, redir->target, global_struct);
+	if (!redir || !redir->target)
+		return (0);
+	expanded = expand_target(redir, redir->target, global_struct);
 	if (!expanded)
-	{
-		redir->ambiguous_flag = 1;
-		return ;
-	}
+		return (0);
 	free(redir->target);
 	redir->target = expanded;
+	return (1);
 }

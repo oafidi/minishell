@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:22:01 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/08 14:11:06 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/10 20:50:59 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	handle_output_redirection(char *file, int ambiguous_flag)
 		return (ft_putstr_fd(AMBIGUOUS_MESSAGE, 2), -1);
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return (ft_putstr_fd(TARGET_NOT_FOUND, 2), -1);
+		return (-1);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");

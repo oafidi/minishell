@@ -31,6 +31,8 @@
 
 # define AMBIGUOUS_MESSAGE "minishell: amgiguous redirect\n"
 # define TARGET_NOT_FOUND "minishell: No such file or directory\n"
+# define PIPE_ERROR "minishell: syntax error near unexpected token `|'\n"
+# define REDIRECTION_ERROR "minishell: syntax error near unexpected token `newline'\n"
 
 extern int	g_sig;
 
@@ -41,8 +43,7 @@ typedef enum e_token_type
     TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
     TOKEN_APPEND,
-    TOKEN_HEREDOC,
-    TOKEN_END
+    TOKEN_HEREDOC
 }   t_token_type;
 
 typedef struct s_token
@@ -70,7 +71,7 @@ typedef struct s_cmd
     char            **args;
     t_redir         *redirs;
     struct s_cmd    *next;
-    struct s_env			*env;
+    struct s_env    *env;
 }   t_cmd;
 
 typedef struct s_env
@@ -87,6 +88,13 @@ typedef struct global_struct
     t_token *tokens;
     t_cmd	*cmds;
 }   global_struct;
+
+typedef struct s_expand_ctx
+{
+	int		i;
+	int		quote_state;
+	char	*result;
+}	t_expand_ctx;
 
 // libft functions
 void	ft_putstr_fd(char *s, int fd);
@@ -110,6 +118,7 @@ char	*ft_strjoin_char(char *s1, char c, char delimiter);
 char	*ft_strjoin(char *s1, char *s2, char delimiter); // strjoin with delimiter and free s1 used in parsing
 int	    count_words(char start, char *s, char last);
 char	*ft_strndup(char *s, size_t n);
+long	ft_atol(char *str);
 
 // utils parsing
 int     is_space(char c);
@@ -125,7 +134,6 @@ char	**env_to_array(t_env *env);
 t_env	*create_env_node(const char *kv); // kaynin jouj
 void	free_env_list(t_env *env); // join paths
 t_env	*create_node(char *str, int add_equal);
-void	free_environment(t_env **env);
 t_env	*copy_environment(char **env);
 
 // builtins check
@@ -167,6 +175,16 @@ int     herdocs_prepare(t_cmd *cmd_list, char **heredoc);
 char	**herdoc_init(t_token *tokens);
 int		count_heredocs(t_token *tokens);
 
+int	    size_list(t_cmd *head);
+void	free_strarray(char **arr);
+int     is_single_builtin(t_cmd *cmd);
+void	run_single_builtin(t_cmd *cmd, t_env **env);
+void	run_pipeline(t_cmd *cmd, char **herdocs, t_env **env);
+void	execute_external(t_cmd *cmd, t_env **env);
+void	try_exec_in_path(t_cmd *cmd, char *path);
+void	create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2]);
+void	run_child(t_cmd *cmd, int input_fd, int pipe_fd[2], t_env **env);
+
 // exit status
 void    exit_status_set(int status);
 int	    *exit_status_get(void);
@@ -191,16 +209,17 @@ void    add_redirection_to_cmd(t_cmd *cmd, t_redir *redir);
 
 // expander
 t_cmd   *expand_pipeline(t_cmd *head, global_struct *global_struct);
-char	*expand_variable(char *str, int *i, t_env *env_list, int exit_status);
+char	*expand_variable(char *str, int *i, t_env *env_list);
 int	    is_valid_var_char(char c);
 int	    is_valid_var_start(char c);
-void	expand_redir_target(t_redir *redir, global_struct *global_struct);
-void	process_heredoc_delimiter(t_redir *redir);
+int	    expand_redir_target(t_redir *redir, global_struct *global_struct);
+int     process_heredoc_delimiter(t_redir *redir);
 char    *expand_export(char *line, global_struct *global_struct);
 char    *expand(char *line, global_struct *global_struct, int start_quote_state);
-void	expand_line(t_cmd *cmd, global_struct *global_struct);
+int     expand_line(t_cmd *cmd, global_struct *global_struct);
 void	free_args(char **p, int n_words);
 char	**line_to_args(char *line);
+int	    count_args(char *str);
 
 // quotes
 int     check_quotes_type(char *str);

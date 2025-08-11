@@ -59,9 +59,9 @@ static int	count_clean_chars(char *target)
 char	*remove_quotes(char *target)
 {
 	char	*clean;
+	char	quote;
 	int		i;
 	int		j;
-	char	quote;
 
 	clean = malloc(sizeof(char) * (count_clean_chars(target) + 1));
 	if (!clean)
