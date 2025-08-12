@@ -62,7 +62,7 @@ t_env	*create_env_node(const char *kv)
 	if (!n || !eq)
 		return (NULL);
 	n->kv = ft_strdup_safe(kv);
-	n->key = strndup(kv, eq - kv);
+	n->key = ft_strndup((char *)kv, eq - kv);
 	n->value = ft_strdup_safe(eq + 1);
 	n->next = NULL;
 	return (n);

@@ -20,7 +20,7 @@ static int	handle_input_redirection(char *file, int ambiguous_flag)
 		return (ft_putstr_fd(AMBIGUOUS_MESSAGE, 2), -1);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (ft_putstr_fd(TARGET_NOT_FOUND, 2), -1);
+		return (perror("minishell-$ "), -1);
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2");

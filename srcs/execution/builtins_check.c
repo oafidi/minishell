@@ -39,6 +39,8 @@ static int	handle_builtin(char **args, t_env **env, int argc)
 		return (ft_exit(args, 1));
 	else if (!ft_strcmp(args[0], "unset"))
 		return (ft_unset(args, env));
+	else if (!ft_strcmp(args[0], "export"))
+		return (ft_export(args, env));
 	return (0);
 }
 

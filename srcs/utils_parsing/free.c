@@ -44,6 +44,7 @@ void	free_command(t_cmd *cmd)
         }
     }
 	free(cmd->args);
+    cmd->env = NULL;
 	free_redirections(cmd->redirs);
     free(cmd->line);
 	free(cmd);

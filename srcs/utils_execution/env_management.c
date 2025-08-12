@@ -38,9 +38,14 @@ t_env	*create_node(char *str, int add_equal)
     }
 	else
     {
-        node->key = ft_substr(str, 0, eq_idx);
+        node->key = ft_substr(str, 0, eq_idx); 
         node->value = ft_strdup("");
     }
+	if (!node->kv || !node->key || !node->value)
+	{
+		free(node->kv);
+		return (free(node->key), free(node->value), free(node), NULL);
+	}
 	node->next = NULL; 
 	return (node);
 }

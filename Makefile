@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -g -O0 #-fsanitize=address -g3
 
 
 SRC = \
@@ -23,6 +23,8 @@ libft/ft_strndup.c \
 libft/ft_strrchr.c \
 libft/ft_atol.c \
 libft/ft_substr.c \
+libft/ft_strstr.c \
+libft/ft_lstadd_back.c \
 \
 srcs/main.c \
 \
@@ -31,6 +33,7 @@ srcs/builtins/echo.c \
 srcs/builtins/env.c \
 srcs/builtins/exit.c \
 srcs/builtins/pwd.c \
+srcs/builtins/export.c \
 srcs/builtins/unset.c \
 \
 srcs/execution/builtins_check.c \
@@ -68,6 +71,8 @@ srcs/utils_execution/split_strjoin_utils.c \
 srcs/utils_execution/strdup_strlen_utils.c \
 srcs/utils_execution/unset_utils.c \
 srcs/utils_execution/utils_env.c \
+srcs/utils_execution/print_sorted_env.c \
+srcs/utils_execution/process_export_arg.c \
 \
 srcs/utils_parsing/free.c \
 srcs/utils_parsing/utils.c

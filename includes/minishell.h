@@ -119,6 +119,8 @@ char	*ft_strjoin(char *s1, char *s2, char delimiter); // strjoin with delimiter 
 int	    count_words(char start, char *s, char last);
 char	*ft_strndup(char *s, size_t n);
 long	ft_atol(char *str);
+char	*ft_strstr(char *str, char *to_find);
+void	ft_lstadd_back(t_env **env, char *key, char *value);
 
 // utils parsing
 int     is_space(char c);
@@ -188,6 +190,12 @@ void	run_child(t_cmd *cmd, int input_fd, int pipe_fd[2], t_env **env);
 // exit status
 void    exit_status_set(int status);
 int	    *exit_status_get(void);
+
+
+// export 
+int     print_sorted_env(t_env *env);
+int		ft_export(char **args, t_env **env);
+int     ft_process_export_arg(char *arg, t_env **env);
 
 // lexer
 int     check_quotes_balance(char *input);
