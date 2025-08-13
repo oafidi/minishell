@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 03:42:01 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:42:02 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/12 16:20:58 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	process_heredoc_line(char *line, t_redir *redir, t_env *env)
 	}
 	else
 		clean_line = line;
-	write(redir->fd, clean_line, strlen(clean_line));
+	write(redir->fd, clean_line, ft_strlen(clean_line));
 	write(redir->fd, "\n", 1);
 	free(clean_line);
 }

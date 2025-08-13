@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 19:25:24 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 15:54:02 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:09:23 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ void	run_single_builtin(t_cmd *cmd, t_env **env)
 	if (handle_redirections(cmd) == -1)
 		exit_status_set(1);
 	else
-	{
-		exit_status_set(0);
-		execute_builtin(cmd->args, env);
-	}
+		exit_status_set(execute_builtin(cmd->args, env));
 	dup2(save_in, STDIN_FILENO);
 	dup2(save_out, STDOUT_FILENO);
 	close(save_in);

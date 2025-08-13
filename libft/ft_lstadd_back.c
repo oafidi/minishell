@@ -1,5 +1,34 @@
 #include "../includes/minishell.h"
 
+static char	*ft_strjoin_key_val(char *key, char *val)
+{
+	size_t	len_key;
+	size_t	len_val;
+	char	*out;
+
+	len_key = ft_strlen(key);
+	len_val = 0;
+	if (val)
+		len_val = ft_strlen(val);
+	if (val)
+		out = malloc(len_key + len_val + 2);
+	else
+		out = malloc(len_key + 1);
+	if (!out)
+		return (NULL);
+	ft_memcpy(out, key, len_key);
+	if (val)
+	{
+		out[len_key] = '=';
+		ft_memcpy(out + len_key + 1, val, len_val);
+		out[len_key + len_val + 1] = '\0';
+	}
+	else
+		out[len_key] = '\0';
+	return (out);
+}
+
+
 static t_env	*ft_create_env_node(char *key, char *value)
 {
 	t_env	*new_node;
@@ -8,14 +37,13 @@ static t_env	*ft_create_env_node(char *key, char *value)
 	if (!new_node)
 		return (NULL);
 	new_node->key = ft_strdup(key);
-    if (!value)
-        new_node->value = ft_strdup("");
-    else
-    {
-        new_node->value = ft_strdup(value);
-    }
-	new_node->kv = join_kv(key, value);
-	if (!new_node->kv || !new_node->key || !new_node->value)
+	new_node->value = NULL; 
+    if (value)
+	{
+		new_node->value = ft_strdup(value);
+	}
+	new_node->kv = ft_strjoin_key_val(key, value);
+	if (!new_node->kv || !new_node->key)
 	{
 		free(new_node->key);
 		free(new_node->value);

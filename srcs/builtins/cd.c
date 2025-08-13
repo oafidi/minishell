@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:13:05 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/08 14:10:27 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:15:33 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	execute_cd(char *target, t_env **env)
 	old_pwd = get_env_value(*env, "PWD");
 	if (chdir(target) == -1)
 	{
-		perror("cd: ");
-		perror(target);
-		perror(": No such file or directory\n");
+		write(2, "cd: ", 4);
+		write(2, target, ft_strlen(target));
+		write(2, ": No such file or directory\n", 29);
 		return (1);
 	}
 	new_pwd = get_new_pwd(target, old_pwd);

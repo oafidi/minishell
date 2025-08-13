@@ -99,7 +99,7 @@ static char *expand_arg(char *arg, int should_split, global_struct *global_struc
     env->value = expand_env_value(temp, should_split_value, global_struct, handle_quote_state(env->key));
     free(temp);
     if (!env->value)
-        return (free_env_list(env), NULL);
+        env->value = ft_strdup("");
     return (build_line_from_env(env));
 }
 

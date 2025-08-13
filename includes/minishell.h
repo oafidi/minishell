@@ -127,13 +127,19 @@ int     is_space(char c);
 int     is_operator(char c);
 int     is_quote(char c);
 
+// export 
+int     print_sorted_env(t_env *env);
+int		ft_export(char **args, t_env **env);
+int     ft_process_export_arg(char *arg, t_env **env);
+
+
 // environment helpers
 char	*join_kv(const char *key, const char *val);
 t_env	*build_minimal_env(void);
 char	*get_env_value(t_env *env_list, char *key);
 void	set_env(t_env **env, const char *key, const char *value);
 char	**env_to_array(t_env *env);
-t_env	*create_env_node(const char *kv); // kaynin jouj
+t_env	*create_env_node(char *kv); // kaynin jouj
 void	free_env_list(t_env *env); // join paths
 t_env	*create_node(char *str, int add_equal);
 t_env	*copy_environment(char **env);
@@ -148,7 +154,6 @@ void	my_echo(int argc, char *argv[]);
 int		pwd_command(t_env *env);
 int		ft_exit(char **args, int must_exit_);
 int		ft_unset(char **args, t_env **env);
-void	print_env(char **env_array);
 void	builtin_env(t_env *env);
 
 // execute commandes
@@ -181,7 +186,7 @@ int	    size_list(t_cmd *head);
 void	free_strarray(char **arr);
 int     is_single_builtin(t_cmd *cmd);
 void	run_single_builtin(t_cmd *cmd, t_env **env);
-void	run_pipeline(t_cmd *cmd, char **herdocs, t_env **env);
+void	run_pipeline(t_cmd *cmd, char **herdocs, t_env **env, int heredoc_count);
 void	execute_external(t_cmd *cmd, t_env **env);
 void	try_exec_in_path(t_cmd *cmd, char *path);
 void	create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2]);
@@ -190,12 +195,6 @@ void	run_child(t_cmd *cmd, int input_fd, int pipe_fd[2], t_env **env);
 // exit status
 void    exit_status_set(int status);
 int	    *exit_status_get(void);
-
-
-// export 
-int     print_sorted_env(t_env *env);
-int		ft_export(char **args, t_env **env);
-int     ft_process_export_arg(char *arg, t_env **env);
 
 // lexer
 int     check_quotes_balance(char *input);

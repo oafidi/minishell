@@ -54,7 +54,7 @@ void print_cmd_list(t_cmd *cmd)
             j = 0;
             while (cmd->args[j])
             {
-                printf(" \"%s\", %zu", cmd->args[j], ft_strlen(cmd->args[j]));
+                printf(" \"%s\"", cmd->args[j]);
                 j++;
             }
         }

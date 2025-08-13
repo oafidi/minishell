@@ -60,7 +60,7 @@ void	free_args(char **p, int n_words)
 	int	i;
 
 	i = 0;
-	if (!p || !(*p))
+	if (!p)
 		return ;
 	if (n_words == -1)
 	{

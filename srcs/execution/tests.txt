@@ -32,9 +32,4 @@ bash-3.2$ ./ls
 
 
 
-<< $"$"USER cat
-
-env + other parametre.
-
-
-
+export b=

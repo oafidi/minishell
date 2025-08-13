@@ -57,7 +57,7 @@ static void	ft_print_env_array(t_env **env_array, int count)
 	i = 0;
 	while (i < count)
 	{
-		if (env_array[i]->value && *(env_array[i]->value))
+		if (env_array[i]->value)
 			printf("declare -x %s=\"%s\"\n", env_array[i]->key,
 				env_array[i]->value);
 		else

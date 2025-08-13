@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:08:58 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 15:55:44 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:00:43 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void	herdocs_clean(char **heredocs, int count)
 	{
 		if (heredocs[i])
 		{
-			unlink(heredocs[i]);
-			heredocs[i] = NULL;
+			unlink(heredocs[i]); //unlink NULL
+			// heredocs[i] = NULL;
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 13:30:33 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/11 10:59:01 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:26:27 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	run_pipeline_iteration(t_cmd **cmd, int *input_fd,
 		if (pid == -1)
 		{
 			perror("fork");
+			close(pipe_fd[0]);
+			close(pipe_fd[1]);
 			break ;
 		}
 		else if (pid == 0)
@@ -57,23 +59,22 @@ void	run_pipeline_iteration(t_cmd **cmd, int *input_fd,
 }
 
 static void	run_pipeline_cleanup(int *input_fd, pid_t *last_pid,
-			char **herdocs, int heredoc_index)
+			char **herdocs, int heredoc_count)
 {
 	if (*input_fd != 0)
 		close(*input_fd);
 	exit_status_set(ft_wait(last_pid));
-	herdocs_clean(herdocs, heredoc_index);
+	herdocs_clean(herdocs, heredoc_count);
+	free_args(herdocs, heredoc_count);
 }
 
-void	run_pipeline(t_cmd *cmd, char **herdocs, t_env **env)
+void	run_pipeline(t_cmd *cmd, char **herdocs, t_env **env, int heredoc_count)
 {
 	int		input_fd;
 	pid_t	last_pid;
-	int		heredoc_index;
 
 	input_fd = 0;
 	last_pid = -1;
-	heredoc_index = 0;
 	run_pipeline_iteration(&cmd, &input_fd, &last_pid, env);
-	run_pipeline_cleanup(&input_fd, &last_pid, herdocs, heredoc_index);
+	run_pipeline_cleanup(&input_fd, &last_pid, herdocs, heredoc_count);
 }

@@ -1,0 +1,6 @@
+ls > " "$test    tq test=' a '
+ls > " a "$test   tq test=' b '
+
+
+export $hgfds
+

@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -O0 #-fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 
 SRC = \
@@ -32,8 +32,8 @@ srcs/builtins/cd.c \
 srcs/builtins/echo.c \
 srcs/builtins/env.c \
 srcs/builtins/exit.c \
-srcs/builtins/pwd.c \
 srcs/builtins/export.c \
+srcs/builtins/pwd.c \
 srcs/builtins/unset.c \
 \
 srcs/execution/builtins_check.c \
