@@ -21,8 +21,8 @@ static char *remove_and_add_quotes(char *value)
         return (NULL);
     result = remove_quotes(value);
     free(value);
-    if (!result)
-        return (NULL);
+    if (!result || !(*result))
+        return (result);
     value = malloc(sizeof(char) * (ft_strlen(result) + 3));
     value[i++] = '"';
     while (result[j])

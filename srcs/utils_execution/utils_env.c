@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 19:35:03 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 16:10:39 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:55:22 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_env	*build_minimal_env(void)
 		return (NULL);
 	if (!head)
 		return (free(cwd), NULL);
+	set_env(&head, "OLDPWD", "");
 	set_env(&head, "PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
 	set_env(&head, "SHLVL", "1");
 	set_env(&head, "PWD", cwd);

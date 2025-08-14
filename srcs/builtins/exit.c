@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:35:35 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 18:05:55 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:16:58 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,33 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi_long(const char *str, int *overflow)
 {
-	int		s;
-	long	r;
-	int		i;
+	int		sign;
+	long	result;
 
-	s = 1;
-	r = 0;
-	i = 0;
-	if (str[i] == '-' || str[i] == '+')
+	*overflow = 0;
+	result = 0;
+	sign = 1;
+	if (*str == '+' || *str == '-')
 	{
-		if (str[i] == '-')
-			s *= (-1);
-		i++;
+		if (*str == '-')
+			sign = -1;
+		str++;
 	}
-	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
+	if (!*str)
+		return (0);
+	while (*str && ft_isdigit(*str))
 	{
-		if (s == -1 && r > (LONG_MAX / 10))
+		if (result > (LONG_MAX - (*str - '0')) / 10)
+		{
+			*overflow = 1;
 			return (0);
-		else if (s == 1 && r > (LONG_MAX / 10))
-			return (-1);
-		r = r * 10 + str[i] - '0';
-		i++;
+		}
+		result = result * 10 + (*str - '0');
+		str++;
 	}
-	return (s * r);
+	return (result * sign);
 }
 
 static char	*skip_spaces(char *s)
@@ -82,6 +84,7 @@ static char	*trim_arg(char *arg)
 int	ft_exit(char **args, int must_exit_)
 {
 	long	code;
+	int		overflow;
 	char	*start;
 
 	if (must_exit_ && (isatty(0) && isatty(1)))
@@ -89,9 +92,8 @@ int	ft_exit(char **args, int must_exit_)
 	if (!args || !args[1])
 		exit(0);
 	start = trim_arg(args[1]);
-	code = ft_atoi(start);
-	if (!is_numeric(start) || ((code == 0 && start[0] != '-')
-			|| (code == -1 && start[0] == '-')))
+	code = ft_atoi_long(start, &overflow);
+	if (!is_numeric(start) || overflow)
 	{
 		write(2, "minishell: exit: ", 18);
 		write(2, start, ft_strlen(start));
@@ -100,5 +102,5 @@ int	ft_exit(char **args, int must_exit_)
 	}
 	if (args[2])
 		return (write(2, "minishell: exit: too many arguments\n", 36), 1);
-	exit((unsigned int)code);
+	exit((unsigned char)code);
 }

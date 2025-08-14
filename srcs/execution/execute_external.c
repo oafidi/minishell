@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 13:32:54 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 20:50:14 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:57:52 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,20 @@
 static void	execve_with_error(char *path, char **args, t_env **env)
 {
 	char	**env_arr;
+	char	*sh_argv[3];
 
 	env_arr = env_to_array(*env);
 	execve(path, args, env_arr);
+	if (errno == ENOEXEC)
+	{
+		sh_argv[0] = "/bin/sh";
+		sh_argv[1] = path;
+		sh_argv[2] = NULL;
+		execve("/bin/sh", sh_argv, env_arr);
+		free_strarray(env_arr);
+		perror("/bin/sh");
+		exit(126);
+	}
 	perror(path);
 	free_strarray(env_arr);
 	exit(126);

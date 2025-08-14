@@ -33,3 +33,21 @@ bash-3.2$ ./ls
 
 
 export b=
+---------
+minishell-$ ./minishell 
+minishell-$ 
+
+minishell-$ 
+
+minishell-$ 
+
+minishell-$ 
+
+minishell-$ 
+-----------
+minishell-$ sfgsdg
+minishell: sfgsdg: command not found
+minishell-$ echo $? | echo $?
+127
+minishell-$ 
+-------------

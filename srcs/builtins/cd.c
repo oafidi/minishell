@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:13:05 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/12 17:15:33 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:10:12 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*handling_double_point( char *path, const char *old_pwd)
 {
 	char	*logical;
 
-	if (ft_strcmp(path, "..") != 0 || access(path, X_OK) != 0)
+	if (ft_strcmp(path, "..") != 0)
 		return (NULL);
 	if (old_pwd[ft_strlen((char *)old_pwd) - 1] == '/')
 		logical = ft_strjoin_execution(old_pwd, "..");
@@ -60,13 +60,16 @@ int	execute_cd(char *target, t_env **env)
 	}
 	new_pwd = get_new_pwd(target, old_pwd);
 	if (!new_pwd)
+		return (perror("cd: error retrieving current directory\n"), 1);
+	if (get_env_value(*env, "PWD"))
 	{
-		perror("cd: error retrieving current directory\n");
-		return (1);
+		if (old_pwd)
+			set_env(env, "OLDPWD", old_pwd);
+		else
+			set_env(env, "OLDPWD", "");
 	}
-	if (old_pwd)
-		set_env(env, "OLDPWD", old_pwd);
-	set_env(env, "PWD", new_pwd);
+	if (get_env_value(*env, "PWD"))
+		set_env(env, "PWD", new_pwd);
 	free(new_pwd);
 	return (0);
 }

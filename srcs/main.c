@@ -60,6 +60,7 @@ int minishell_loop(char **env)
         global_struct.cmds = parser(global_struct.tokens, &global_struct);
         if (!global_struct.cmds)
         {
+            printf("minishell: syntax error\n");
             free_token_list(global_struct.tokens);
             free(input);
             continue ;

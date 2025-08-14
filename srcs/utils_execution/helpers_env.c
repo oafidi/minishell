@@ -53,9 +53,9 @@ char	*join_kv(const char *key, const char *val)
 	k = 0;
 	v = 0;
 	if (key)
-		k = ft_strlen((char *)key);
+		k = strlen(key);
 	if (val)
-		v = ft_strlen((char *)val);
+		v = strlen(val);
 	out = malloc(k + v + 2);
 	if (!out)
 		return (NULL);

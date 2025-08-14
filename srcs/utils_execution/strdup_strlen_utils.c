@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:48:15 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 16:07:29 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:23:04 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,47 @@ char	*ft_strjoin_execution(char const *s1, char const *s2)
 		result[i++] = s2[j++];
 	result[i] = '\0';
 	return (result);
+}
+
+int	ft_is_valid_identifier(char *arg)
+{
+	int	i;
+
+	if (!is_valid_var_start(arg[0]))
+		return (0);
+	i = 1;
+	while (arg[i] && arg[i] != '=' && !(arg[i] == '+' && arg[i + 1] == '='))
+	{
+		if (!is_valid_var_char(arg[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_parse_export_arg(char *arg, char **key,
+			char **value, int *append)
+{
+	char	*plus_pos;
+	char	*eq_pos;
+
+	*append = 0;
+	plus_pos = ft_strstr(arg, "+=");
+	if (plus_pos)
+	{
+		*append = 1;
+		*key = ft_strndup(arg, plus_pos - arg);
+		*value = ft_strdup(plus_pos + 2);
+		return (ft_is_valid_identifier(*key));
+	}
+	eq_pos = ft_strchr(arg, '=');
+	if (eq_pos)
+	{
+		*key = ft_strndup(arg, eq_pos - arg);
+		*value = ft_strdup(eq_pos + 1);
+		return (ft_is_valid_identifier(*key));
+	}
+	*key = ft_strdup(arg);
+	*value = NULL;
+	return (ft_is_valid_identifier(*key));
 }
