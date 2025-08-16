@@ -12,6 +12,17 @@
 
 #include "../../includes/minishell.h"
 
+t_env	*find_env_var(t_env *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+}
+
 static char	*handle_dotdot(char *out)
 {
 	char	*slash;
@@ -53,9 +64,9 @@ char	*join_kv(const char *key, const char *val)
 	k = 0;
 	v = 0;
 	if (key)
-		k = strlen(key);
+		k = ft_strlen((char *)key);
 	if (val)
-		v = strlen(val);
+		v = ft_strlen((char *)val);
 	out = malloc(k + v + 2);
 	if (!out)
 		return (NULL);

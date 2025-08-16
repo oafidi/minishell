@@ -50,7 +50,7 @@ int minishell_loop(char **env)
     char		    **heredoc;
     char            *input;
 
-    if ((!init_global_struct(&global_struct, env)) || (!isatty(0) || !isatty(1)))
+    if ((!isatty(0) || !isatty(1)) || (!init_global_struct(&global_struct, env)))
         return (1);
     while (1)
     {
@@ -60,7 +60,6 @@ int minishell_loop(char **env)
         global_struct.cmds = parser(global_struct.tokens, &global_struct);
         if (!global_struct.cmds)
         {
-            printf("minishell: syntax error\n");
             free_token_list(global_struct.tokens);
             free(input);
             continue ;

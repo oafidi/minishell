@@ -130,8 +130,9 @@ int     is_quote(char c);
 // export 
 int     print_sorted_env(t_env *env);
 int		ft_export(char **args, t_env **env);
-int     ft_process_export_arg(char *arg, t_env **env);
-
+int     process_export_arg(char *arg, t_env **env);
+int     is_valid_identifier(char *arg);
+t_env	*find_env_var(t_env *env, char *key);
 
 // environment helpers
 char	*join_kv(const char *key, const char *val);
@@ -149,15 +150,15 @@ int		execute_builtin(char **args, t_env **env);
 int		check_builtin(char *cmd);
 
 // builtins
-int		cd_command(int argc, char **argv, t_env **env);
-void	my_echo(int argc, char *argv[]);
-int		pwd_command(t_env *env);
+int		ft_cd(int argc, char **argv, t_env **env);
+void    ft_echo(int argc, char *argv[]);
+int		ft_pwd(t_env *env);
 int		ft_exit(char **args, int must_exit_);
 int		ft_unset(char **args, t_env **env);
-void	builtin_env(t_env *env);
+void	ft_env(t_env *env);
 
 // execute commandes
-void execute_command(t_cmd *cmd_head, char **herdocs, t_env **env, int herdocs_count);
+void    execute_command(t_cmd *cmd_head, char **herdocs, t_env **env, int herdocs_count);
 
 // rederections
 int		ft_wait(pid_t *last_pid);
@@ -177,7 +178,6 @@ void	clean_string_array(char **arr);
 void	process_heredoc_line(char *line, t_redir *redir, t_env *env);
 char	*handle_heredoc_input(t_redir *redir, char **heredocs, t_env *env , int index);
 void	herdocs_clean(char **heredocs, int count);
-// void	herdocs_prepare(t_cmd *cmd_list, char **heredoc);
 int     herdocs_prepare(t_cmd *cmd_list, char **heredoc);
 char	**herdoc_init(t_token *tokens);
 int		count_heredocs(t_token *tokens);

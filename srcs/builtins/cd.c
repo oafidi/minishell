@@ -74,7 +74,7 @@ int	execute_cd(char *target, t_env **env)
 	return (0);
 }
 
-int	cd_command(int argc, char **argv, t_env **env)
+int	ft_cd(int argc, char **argv, t_env **env)
 {
 	if (argc != 2)
 	{

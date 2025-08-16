@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static int	ft_count_env_vars(t_env *env)
+static int	count_env_vars(t_env *env)
 {
 	int	count;
 
@@ -13,7 +13,7 @@ static int	ft_count_env_vars(t_env *env)
 	return (count);
 }
 
-static void	ft_fill_env_array(t_env **env_array, t_env *env, int count)
+static void	fill_env_array(t_env **env_array, t_env *env, int count)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ static void	ft_fill_env_array(t_env **env_array, t_env *env, int count)
 	}
 }
 
-static void	ft_sort_env_array(t_env **env_array, int count)
+static void	sort_env_array(t_env **env_array, int count)
 {
 	int		i;
 	int		j;
@@ -38,7 +38,7 @@ static void	ft_sort_env_array(t_env **env_array, int count)
 		j = i + 1;
 		while (j < count)
 		{
-			if (ft_strcmp(env_array[i]->key, env_array[j]->key) > 0)
+			if (ft_strcmp(env_array[i]->key, env_array[j]->key) > 0) // key and kv should never be NULL , but value it s possible to be NULL;
 			{
 				temp = env_array[i];
 				env_array[i] = env_array[j];
@@ -50,7 +50,7 @@ static void	ft_sort_env_array(t_env **env_array, int count)
 	}
 }
 
-static void	ft_print_env_array(t_env **env_array, int count)
+static void	print_env_array(t_env **env_array, int count)
 {
 	int	i;
 
@@ -71,15 +71,15 @@ int	print_sorted_env(t_env *env)
 	t_env   **env_array;
 	int     count;
 
-	count = ft_count_env_vars(env);
+	count = count_env_vars(env);
 	if (count == 0)
 		return (0);
 	env_array = malloc(sizeof(t_env *) * count);
 	if (!env_array)
 		return (1);
-	ft_fill_env_array(env_array, env, count);
-	ft_sort_env_array(env_array, count);
-	ft_print_env_array(env_array, count);
+	fill_env_array(env_array, env, count);
+	sort_env_array(env_array, count);
+	print_env_array(env_array, count);
 	free(env_array);
     return (0);
 }

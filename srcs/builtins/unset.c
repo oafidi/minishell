@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static int	ft_is_valid_identifier(char *arg)
+int	is_valid_identifier(char *arg)
 {
 	int	i;
 
@@ -39,7 +39,7 @@ int	ft_unset(char **args, t_env **env)
 		return (exit_status);
 	while (args[i])
 	{
-		if (!exit_status && !ft_is_valid_identifier(args[i]))
+		if (!exit_status && !is_valid_identifier(args[i]))
 		{
 			exit_status = 1;
 			ft_putstr_fd("minishell: unset: `", 2);

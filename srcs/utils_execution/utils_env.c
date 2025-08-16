@@ -20,7 +20,7 @@ void	set_env(t_env **env, const char *key, const char *value)
 	cur = *env;
 	while (cur)
 	{
-		if (ft_strcmp(cur->key, (char *)key) == 0)
+		if (cur->key && ft_strcmp(cur->key, (char *)key) == 0)
 		{
 			free(cur->value);
 			free(cur->kv);

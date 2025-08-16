@@ -11,7 +11,7 @@ int	ft_export(char **args, t_env **env)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_process_export_arg(args[i], env))
+		if (process_export_arg(args[i], env))
 			result = 1;
 		i++;
 	}
