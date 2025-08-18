@@ -1,2 +1,0 @@
-mkdir lhebla;
-echo hello;

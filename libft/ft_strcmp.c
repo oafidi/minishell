@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:41:33 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:41:35 by oafidi           ###   ########.fr       */
+/*   Created: 2025/08/18 17:02:22 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:02:24 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
-    i = 0;
-	while((s1[i] == s2[i]) && s1[i] && s2[i])
+	i = 0;
+	while ((s1[i] == s2[i]) && s1[i] && s2[i])
 		i++;
-	return (s1[i]-s2[i]);
+	return (s1[i] - s2[i]);
 }

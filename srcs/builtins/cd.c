@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:13:05 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/13 16:10:12 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/16 16:58:13 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	execute_cd(char *target, t_env **env)
 	return (0);
 }
 
-int	ft_cd(int argc, char **argv, t_env **env)
+int	cd_command(int argc, char **argv, t_env **env)
 {
 	if (argc != 2)
 	{

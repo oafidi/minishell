@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:48:18 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/12 13:23:49 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/16 16:00:20 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	delete_env_variable(char *key, t_env **env)
 	curr = *env;
 	while (curr)
 	{
-		if (ft_strcmp(curr->key, key) == 0)
+		if (curr->key && ft_strcmp(curr->key, key) == 0)
 		{
 			if (prev)
 				prev->next = curr->next;
@@ -60,11 +60,18 @@ t_env	*create_env_node(char *kv)
 
 	eq = ft_strchr(kv, '=');
 	n = malloc(sizeof(t_env));
-	if (!n || !eq)
-		return (NULL);
+	if (!eq || !n)
+		return (free(n), NULL);
 	n->kv = ft_strdup_safe(kv);
 	n->key = ft_strndup(kv, eq - kv);
 	n->value = ft_strdup_safe(eq + 1);
+	if (!n->kv || !n->key)
+	{
+		free(n->key);
+		free(n->kv);
+		free(n->value);
+		return (free(n), NULL);
+	}
 	n->next = NULL;
 	return (n);
 }

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/18 17:01:56 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:01:58 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 char	*ft_strstr(char *str, char *to_find)
 {
-	unsigned int pos;
-	unsigned int i;
+	unsigned int	pos;
+	unsigned int	i;
 
 	if (!to_find)
 		return (str);

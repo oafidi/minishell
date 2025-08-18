@@ -1,12 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_count_words.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/18 17:02:40 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:02:42 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
+
+static void	fill_result(char *res, char start, char *s, char last)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (start)
+		res[i++] = start;
+	while (s && s[j])
+		res[i++] = s[j++];
+	if (last)
+		res[i++] = last;
+	res[i] = '\0';
+}
 
 static char	*join_three(char start, char *s, char last)
 {
 	size_t	len;
-	char	*res;
-	size_t	i;
-	size_t	j;
 	size_t	add;
+	char	*res;
 
 	len = 0;
 	if (s)
@@ -19,15 +45,7 @@ static char	*join_three(char start, char *s, char last)
 	res = malloc(len + add + 1);
 	if (!res)
 		return (NULL);
-	i = 0;
-	j = 0;
-	if (start)
-		res[i++] = start;
-	while (s && s[j])
-		res[i++] = s[j++];
-	if (last)
-		res[i++] = last;
-	res[i] = '\0';
+	fill_result(res, start, s, last);
 	return (res);
 }
 

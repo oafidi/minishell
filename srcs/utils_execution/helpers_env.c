@@ -6,22 +6,11 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:48:07 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 16:04:07 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/16 15:12:54 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-t_env	*find_env_var(t_env *env, char *key)
-{
-	while (env)
-	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
-}
 
 static char	*handle_dotdot(char *out)
 {

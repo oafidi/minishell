@@ -28,7 +28,7 @@ bool	is_valid_n_option(const char *arg)
 	return (true);
 }
 
-void	ft_echo(int argc, char *argv[])
+void	my_echo(int argc, char *argv[])
 {
 	int		i;
 	bool	newline;

@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 19:35:03 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/13 15:55:22 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/16 17:22:17 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,30 @@
 void	set_env(t_env **env, const char *key, const char *value)
 {
 	t_env	*cur;
-	t_env	*new_node;
+	char	*copy_value;
+	char	*copy_kv;
 
 	cur = *env;
 	while (cur)
 	{
 		if (cur->key && ft_strcmp(cur->key, (char *)key) == 0)
 		{
-			free(cur->value);
-			free(cur->kv);
-			cur->value = ft_strdup_safe(value);
-			cur->kv = join_kv(key, value);
+			copy_value = ft_strdup_safe(value);
+			copy_kv = join_kv(key, value);
+			if (copy_value && copy_kv)
+			{
+				free(cur->value);
+				free(cur->kv);
+				cur->value = copy_value;
+				cur->kv = copy_kv;
+			}
+			else
+				return (free(copy_value), free(copy_kv));
 			return ;
 		}
 		cur = cur->next;
 	}
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return ;
-	new_node->key = ft_strdup_safe(key);
-	new_node->value = ft_strdup_safe(value);
-	new_node->kv = join_kv(key, value);
-	new_node->next = *env;
-	*env = new_node;
+	ft_lstadd_back(env, (char *)key, (char *)value);
 }
 
 static size_t	count_valid_env(t_env *env)
@@ -83,12 +84,12 @@ t_env	*build_minimal_env(void)
 	t_env	*head;
 
 	cwd = getcwd(NULL, 0);
-	head = create_env_node("_=/usr/bin/env");
 	if (!cwd)
 		return (NULL);
+	head = create_env_node("_=/usr/bin/env");
 	if (!head)
 		return (free(cwd), NULL);
-	set_env(&head, "OLDPWD", "");
+	set_env(&head, "OLDPWD", NULL);
 	set_env(&head, "PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
 	set_env(&head, "SHLVL", "1");
 	set_env(&head, "PWD", cwd);

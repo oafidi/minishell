@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:08:58 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/13 16:58:40 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/18 18:03:03 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	herdocs_clean(char **heredocs, int count)
 		if (heredocs[i])
 		{
 			unlink(heredocs[i]);
-			heredocs[i] = NULL;
 		}
 		i++;
 	}

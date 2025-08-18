@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:41:56 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:41:58 by oafidi           ###   ########.fr       */
+/*   Created: 2025/08/18 17:01:16 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:15:23 by oafidi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 static size_t	get_equal_index(const char *str)
 {
-	size_t	i = 0;
+	size_t	i;
 
-	while (str[i] && str[i] != '=')
+	i = 0;
+	while (str && str[i] && str[i] != '=')
 		i++;
 	return (i);
 }
@@ -32,28 +33,28 @@ t_env	*create_node(char *str, int add_equal)
 	eq_idx = get_equal_index(str);
 	node->kv = ft_strdup(str);
 	if (str[eq_idx] == '=')
-    {
-        node->key = ft_substr(str, 0, eq_idx + add_equal);
-        node->value = ft_strdup(str + eq_idx + 1);
-    }
+	{
+		node->key = ft_substr(str, 0, eq_idx + add_equal);
+		node->value = ft_strdup(str + eq_idx + 1);
+	}
 	else
-    {
-        node->key = ft_substr(str, 0, eq_idx); 
-        node->value = ft_strdup("");
-    }
-	if (!node->kv || !node->key || !node->value)
+	{
+		node->key = ft_substr(str, 0, eq_idx);
+		node->value = ft_strdup("");
+	}
+	if (!node->kv || !node->key)
 	{
 		free(node->kv);
 		return (free(node->key), free(node->value), free(node), NULL);
 	}
-	node->next = NULL; 
+	node->next = NULL;
 	return (node);
 }
 
-static char *increment_shlvl(char *value, char **kv)
+static char	*increment_shlvl(char *value, char **kv)
 {
-	long shlvl;
-	char *new_vlaue;
+	long	shlvl;
+	char	*new_vlaue;
 
 	shlvl = ft_atol(value);
 	shlvl++;
@@ -66,10 +67,12 @@ static char *increment_shlvl(char *value, char **kv)
 
 t_env	*copy_environment(char **env)
 {
-	t_env	*head = NULL;
-	t_env	*last = NULL;
+	t_env	*head;
+	t_env	*last;
 	t_env	*new;
 
+	head = NULL;
+	last = NULL;
 	if (!env || !*env)
 		return (build_minimal_env());
 	while (env && *env)
@@ -77,7 +80,7 @@ t_env	*copy_environment(char **env)
 		new = create_node(*env, 0);
 		if (!new)
 			return (free_env_list(head), NULL);
-		if (!ft_strcmp(new->key, "SHLVL"))
+		if (new->key && !ft_strcmp(new->key, "SHLVL"))
 			new->value = increment_shlvl(new->value, &new->kv);
 		if (!head)
 			head = new;
@@ -98,7 +101,7 @@ char	*get_env_value(t_env *env_list, char *key)
 	current = env_list;
 	while (current)
 	{
-		if (ft_strcmp(current->key, key) == 0)
+		if (current->key && ft_strcmp(current->key, key) == 0)
 			return (current->value);
 		current = current->next;
 	}

@@ -1,6 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -O0 #-fsanitize=address -g3
-
+CFLAGS = -Wall -Wextra -Werror
 
 SRC = \
 libft/ft_count_words.c \
@@ -47,6 +46,7 @@ srcs/execution/execute_child.c \
 srcs/execution/execute_external.c \
 srcs/execution/execute_pipeline.c \
 srcs/execution/execution_code.c \
+srcs/execution/termios_.c \
 \
 srcs/expander/args_handler.c \
 srcs/expander/expander.c \

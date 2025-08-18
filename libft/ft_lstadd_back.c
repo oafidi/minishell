@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/18 17:02:33 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:23:45 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-static char	*ft_strjoin_key_val(char *key, char *val)
+char	*ft_strjoin_key_val(char *key, char *val)
 {
 	size_t	len_key;
 	size_t	len_val;
@@ -28,7 +40,6 @@ static char	*ft_strjoin_key_val(char *key, char *val)
 	return (out);
 }
 
-
 static t_env	*ft_create_env_node(char *key, char *value)
 {
 	t_env	*new_node;
@@ -37,16 +48,15 @@ static t_env	*ft_create_env_node(char *key, char *value)
 	if (!new_node)
 		return (NULL);
 	new_node->key = ft_strdup(key);
-	new_node->value = NULL; 
-    if (value)
-	{
+	new_node->value = NULL;
+	if (value)
 		new_node->value = ft_strdup(value);
-	}
 	new_node->kv = ft_strjoin_key_val(key, value);
 	if (!new_node->kv || !new_node->key)
 	{
 		free(new_node->key);
 		free(new_node->value);
+		free(new_node->kv);
 		free(new_node);
 		return (NULL);
 	}

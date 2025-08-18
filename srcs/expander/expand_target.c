@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_target.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:42:06 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:42:08 by oafidi           ###   ########.fr       */
+/*   Created: 2025/08/18 12:43:10 by yettalib          #+#    #+#             */
+/*   Updated: 2025/08/18 12:43:11 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 static void	handle_quote(char *target, t_expand_ctx *ctx)
 {
-	if (target[ctx->i] != get_quote_char(ctx->quote_state) && ctx->quote_state != NO_QUOTE)
+	if (target[ctx->i] != get_quote_char(ctx->quote_state) \
+		&& ctx->quote_state != NO_QUOTE)
 		ctx->result = ft_strjoin_char(ctx->result, target[ctx->i], 0);
 	update_quote_state(target[(ctx->i)++], &ctx->quote_state);
 }
 
-static void	handle_var_expand(t_redir *redir, char *target, t_expand_ctx *ctx, global_struct *g)
+void	handle_var_expand(t_redir *redir, char *target, \
+		t_expand_ctx *ctx, t_global_struct *g)
 {
 	char	*var_exp;
 	int		last_index;
@@ -34,13 +36,14 @@ static void	handle_var_expand(t_redir *redir, char *target, t_expand_ctx *ctx, g
 	last_index = ft_strlen(ctx->result) - 1;
 	if (last_index < 0)
 		last_index = 0;
-	if (ctx->quote_state == NO_QUOTE && count_words(ctx->result[last_index], var_exp, target[ctx->i]) != 1)
+	if (ctx->quote_state == NO_QUOTE && \
+		count_words(ctx->result[last_index], var_exp, target[ctx->i]) != 1)
 		redir->ambiguous_flag = 1;
 	ctx->result = ft_strjoin(ctx->result, var_exp, 0);
 	free(var_exp);
 }
 
-static char	*expand_target(t_redir *redir, char *target, global_struct *g)
+static char	*expand_target(t_redir *redir, char *target, t_global_struct *g)
 {
 	t_expand_ctx	ctx;
 
@@ -63,7 +66,7 @@ static char	*expand_target(t_redir *redir, char *target, global_struct *g)
 	return (ctx.result);
 }
 
-int	expand_redir_target(t_redir *redir, global_struct *global_struct)
+int	expand_redir_target(t_redir *redir, t_global_struct *global_struct)
 {
 	char	*expanded;
 

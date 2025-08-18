@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 19:25:24 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/12 17:09:23 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:57:04 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,24 @@ void	run_single_builtin(t_cmd *cmd, t_env **env)
 
 	save_in = dup(STDIN_FILENO);
 	save_out = dup(STDOUT_FILENO);
+	if (save_in == -1 || save_out == -1)
+	{
+		perror("dup");
+		if (save_in != -1)
+			close(save_in);
+		if (save_out != -1)
+			close(save_out);
+		exit_status_set(1);
+		return ;
+	}
 	if (handle_redirections(cmd) == -1)
 		exit_status_set(1);
 	else
 		exit_status_set(execute_builtin(cmd->args, env));
-	dup2(save_in, STDIN_FILENO);
-	dup2(save_out, STDOUT_FILENO);
+	if (dup2(save_in, STDIN_FILENO) == -1)
+		perror("dup2");
+	if (dup2(save_out, STDOUT_FILENO) == -1)
+		perror("dup2");
 	close(save_in);
 	close(save_out);
 }

@@ -25,13 +25,16 @@ int	check_builtin(char *cmd)
 static int	handle_builtin(char **args, t_env **env, int argc)
 {
 	if (!ft_strcmp(args[0], "cd"))
-		return (ft_cd(argc, args, env));
+		return (cd_command(argc, args, env));
 	else if (!ft_strcmp(args[0], "pwd"))
-		return (ft_pwd(*env));
+		return (pwd_command(*env));
 	else if (!ft_strcmp(args[0], "env"))
-		return (ft_env(*env), 0);
+	{
+		builtin_env(*env);
+		return (0);
+	}
 	else if (!ft_strcmp(args[0], "echo"))
-		return (ft_echo(argc, args), 0);
+		my_echo(argc, args);
 	else if (!ft_strcmp(args[0], "exit"))
 		return (ft_exit(args, 1));
 	else if (!ft_strcmp(args[0], "unset"))

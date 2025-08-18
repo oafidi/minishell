@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 03:41:44 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:41:45 by oafidi           ###   ########.fr       */
+/*   Updated: 2025/08/18 13:45:13 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ size_t	ft_strlen(char *s)
 	size_t	i;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
+	while (s && s[i])
 		i++;
 	return (i);
 }

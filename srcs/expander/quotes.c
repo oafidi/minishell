@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:42:17 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:42:19 by oafidi           ###   ########.fr       */
+/*   Created: 2025/08/18 12:43:19 by yettalib          #+#    #+#             */
+/*   Updated: 2025/08/18 12:43:20 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int check_quotes_type(char *str)
+int	check_quotes_type(char *str)
 {
 	int		i;
 	char	first_quote;
 
 	i = 0;
 	first_quote = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if ((str[i] == '\'' || str[i] == '"') && !first_quote)
 		{
@@ -100,11 +100,11 @@ void	update_quote_state(char c, int *quote_state)
 	}
 }
 
-char get_quote_char(int macro)
+char	get_quote_char(int macro)
 {
 	if (macro == SINGLE_QUOTE)
-		return '\'';
+		return ('\'');
 	else if (macro == DOUBLE_QUOTE)
-		return '"';
-	return 0;
+		return ('"');
+	return (0);
 }

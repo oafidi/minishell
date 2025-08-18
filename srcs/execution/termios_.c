@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   termios_.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:41:37 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/16 15:40:56 by yettalib         ###   ########.fr       */
+/*   Created: 2025/08/18 12:25:28 by yettalib          #+#    #+#             */
+/*   Updated: 2025/08/18 13:51:44 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-char	*ft_strdup(char *s1)
+struct termios	*terminal_settings(void)
 {
-	char	*new;
-	size_t	i;
+	static struct termios	settings;
 
-	if (!s1)
-		return (NULL);
-	new = malloc(sizeof(char) * (ft_strlen(s1) + 1));
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
-		new[i] = s1[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
+	return (&settings);
+}
+
+void	store_terminal(void)
+{
+	struct termios	*ts;
+
+	ts = terminal_settings();
+	tcgetattr(STDIN_FILENO, ts);
+}
+
+void	restore_terminal(void)
+{
+	struct termios	*ts;
+
+	ts = terminal_settings();
+	tcsetattr(STDIN_FILENO, TCSANOW, ts);
 }

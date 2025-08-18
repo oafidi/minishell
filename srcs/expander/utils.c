@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 03:42:22 by oafidi            #+#    #+#             */
-/*   Updated: 2025/08/03 03:42:24 by oafidi           ###   ########.fr       */
+/*   Created: 2025/08/18 12:43:23 by yettalib          #+#    #+#             */
+/*   Updated: 2025/08/18 15:17:31 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*remove_and_add_quotes(char *value)
+{
+	char	*result;
+	int		j;
+	int		i;
+
+	i = 0;
+	j = 0;
+	if (!value)
+		return (NULL);
+	result = remove_quotes(value);
+	free(value);
+	if (!result || !(*result))
+		return (result);
+	value = malloc(sizeof(char) * (ft_strlen(result) + 3));
+	value[i++] = '"';
+	while (result[j])
+		value[i++] = result[j++];
+	value[i++] = '"';
+	value[i] = '\0';
+	free(result);
+	return (value);
+}
 
 static char	*extract_var_name(char *str, int *len)
 {
@@ -22,7 +46,7 @@ static char	*extract_var_name(char *str, int *len)
 		return (NULL);
 	while (str[*len] && is_valid_var_char(str[*len]))
 		(*len)++;
-	var_name = malloc(sizeof(char) * (*len + 1)); // testi had lblassa
+	var_name = malloc(sizeof(char) * (*len + 1));
 	if (!var_name)
 		return (NULL);
 	i = -1;
@@ -41,7 +65,7 @@ char	*expand_variable(char *str, int *i, t_env *env_list)
 	if (str[*i + 1] == '?')
 		return (*i += 2, ft_itoa(*exit_status_get()));
 	var_name = extract_var_name(str + *i + 1, &var_len);
-	if (!var_name)
+	if (!var_name && var_len == 0)
 		return ((*i)++, ft_strdup("$"));
 	if (!var_name)
 		return (NULL);

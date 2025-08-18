@@ -6,7 +6,7 @@
 /*   By: yettalib <yettalib@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:22:26 by yettalib          #+#    #+#             */
-/*   Updated: 2025/08/10 15:40:38 by yettalib         ###   ########.fr       */
+/*   Updated: 2025/08/18 12:31:20 by yettalib         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ int	ft_wait(pid_t *last_pid)
 		}
 		pid = waitpid(-1, &status, 0);
 	}
+	restore_terminal();
 	return (exit_status);
 }

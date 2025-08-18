@@ -1,63 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oafidi <oafidi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/18 17:00:53 by oafidi            #+#    #+#             */
+/*   Updated: 2025/08/18 17:00:57 by oafidi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-void    free_token_list(t_token *tokens)
+void	free_token_list(t_token *tokens)
 {
-    t_token *next;
-    
-    while (tokens)
-    {
-        next = tokens->next;
-        if (tokens->value)
-            free(tokens->value);
-        free(tokens);
-        tokens = next;
-    }
+	t_token	*next;
+
+	while (tokens)
+	{
+		next = tokens->next;
+		if (tokens->value)
+			free(tokens->value);
+		free(tokens);
+		tokens = next;
+	}
 }
 
-void    free_redirections(t_redir *redirs)
+void	free_redirections(t_redir *redirs)
 {
-    t_redir *next;
-    
-    while (redirs)
-    {
-        next = redirs->next;
-        if (redirs->target)
-            free(redirs->target);
-        if (redirs->file)
-            free(redirs->file);
-        free(redirs);
-        redirs = next;
-    }
+	t_redir	*next;
+
+	while (redirs)
+	{
+		next = redirs->next;
+		if (redirs->target)
+			free(redirs->target);
+		if (redirs->file)
+			free(redirs->file);
+		free(redirs);
+		redirs = next;
+	}
 }
 
 void	free_command(t_cmd *cmd)
 {
-    int i;
+	int	i;
 
-    if (cmd->args)
-    {
-        i = 0;
-        while (cmd->args[i])
-        {
-            free(cmd->args[i]);
-            i++;
-        }
-    }
+	if (cmd->args)
+	{
+		i = 0;
+		while (cmd->args[i])
+		{
+			free(cmd->args[i]);
+			i++;
+		}
+	}
 	free(cmd->args);
 	free_redirections(cmd->redirs);
-    cmd->env = NULL;
-    free(cmd->line);
+	cmd->env = NULL;
+	free(cmd->line);
 	free(cmd);
 }
 
-void    free_command_list(t_cmd *commands)
+void	free_command_list(t_cmd *commands)
 {
-    t_cmd *next;
-    
-    while (commands)
-    {
-        next = commands->next;
-        free_command(commands);
-        commands = next;
-    }
+	t_cmd	*next;
+
+	while (commands)
+	{
+		next = commands->next;
+		free_command(commands);
+		commands = next;
+	}
 }
