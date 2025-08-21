@@ -86,10 +86,10 @@ all: $(TARGET)
 READLINE_COMPILE = -I$(shell brew --prefix readline)/include
 READLINE_LINK = -lreadline -L$(shell brew --prefix readline)/lib
 
-$(TARGET): includes/minishell.h $(OBJS)
+$(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) $(OBJS) -o $(TARGET) $(READLINE_LINK)
 
-%.o: %.c
+%.o: %.c includes/minishell.h
 	$(CC) $(CFLAGS) $(READLINE_COMPILE) -c $< -o $@
 
 clean:

@@ -90,7 +90,7 @@ int	ft_exit(char **args, int must_exit_)
 	if (must_exit_ && (isatty(0) && isatty(1)))
 		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args || !args[1])
-		exit(0);
+		exit(*exit_status_get());
 	start = trim_arg(args[1]);
 	code = ft_atoi_long(start, &overflow);
 	if (!is_numeric(start) || overflow)
